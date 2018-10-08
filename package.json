@@ -19,7 +19,7 @@
     "mobile",
     "expo",
     "gesture",
-    ""
+    "recognition"
   ],
   "author": "Evan Holmes, Bidit Sharma, Bridget Koehler",
   "bugs": {
