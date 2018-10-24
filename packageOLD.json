@@ -22,17 +22,15 @@
     "recognition"
   ],
   "author": "Evan Holmes, Bidit Sharma, Bridget Koehler",
-  "bugs": {
-    "url": "https://github.com/jayeszee/rn-draw/issues"
-  },
   "license": "MIT",
   "peerDependencies": {
+    "expo": "*",
     "react": "*",
     "react-native": "*",
-    "react-native-svg": "*",
-    "react-native-fs": "*"
+    "react-native-svg": "*"
   },
   "dependencies": {
-    "humps": "2.0.1"
+    "humps": "2.0.1",
+    "react-native-fs": "2.12.0"
   }
 }

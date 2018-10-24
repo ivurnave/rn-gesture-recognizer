@@ -1,3 +1,9 @@
-import pad from './src/view/pad'
+import Recognizer from './src/view/recognizer';
+import Trainer from './src/view/trainer';
+import Pad from './src/view/pad'
 
-module.exports = pad
+module.exports = {
+	Recognizer,
+    Trainer,
+    Pad
+};
