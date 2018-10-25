@@ -3,8 +3,8 @@ import {View, PanResponder, StyleSheet} from 'react-native';
 import Pen from '../tools/pen';
 import Point from '../tools/point';
 import humps from 'humps';
-import {Svg} from '../config';
-const {G, Path} = Svg;
+// import {Svg} from '../config';
+// const {G, Path} = Svg;
 
 export default class Pad extends React.Component {
 	/*

@@ -3,12 +3,8 @@ import {View, PanResponder, StyleSheet} from 'react-native';
 import Pen from '../tools/pen';
 import Point from '../tools/point';
 import humps from 'humps';
-import {Svg} from '../config';
-const {G, Path} = Svg;
-
-// for writing the gestureClasses.json
-var RNFS = require('react-native-fs');
-var path = RNFS.DocumentDirectoryPath + '/gestureClasses.json';
+import Svg, {G, Path} from 'react-native-svg';
+let RNFS = require('react-native-fs'); // for writing json files
 
 export default class Trainer extends React.Component {
 	constructor(props, context) {
@@ -28,14 +24,6 @@ export default class Trainer extends React.Component {
 			onPanResponderMove: (evt, gs) => this.onResponderMove(evt, gs),
 			onPanResponderRelease: (evt, gs) => this.onResponderRelease(evt, gs),
 		});
-		// const rewind = props.rewind || function() {};
-		// const clear = props.clear || function() {};
-		// const exportGestureClass = props.exportGestureClass || function() {};
-		// this._clientEvents = {
-		// 	rewind: rewind(this.rewind),
-		//     clear: clear(this.clear),
-		//     exportGestureClass: exportGestureClass(this.exportGestureClass),
-		// };
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -98,20 +86,21 @@ export default class Trainer extends React.Component {
 
 	// Write the current gesture class to the gestureClasses.json file
 	exportGestureClass = () => {
-		console.log(this.state.gestureClassPoints);
-
-		// write the file -- TODO
-		RNFS.writeFile(path, JSON.stringify(this.state.gestureClassPoints), 'utf8')
-			.then(success => {
-				console.log('FILE WRITTEN!');
-			})
-			.catch(err => {
-				console.log(err.message);
+		// console.log(this.state.gestureClassPoints);
+		if (this.state.gestureClassPoints.length != 0) {
+			const path = this.props.path + '/gestureClasses.json';
+			RNFS.writeFile(path, JSON.stringify(this.state.gestureClassPoints), 'utf8')
+				.then(success => {
+					console.log('gestureClasses written!');
+				})
+				.catch(err => {
+					console.log(err.message);
+				});
+	
+			this.setState({
+				gestureClassPoints: [],
 			});
-
-		this.setState({
-			gestureClassPoints: [],
-		});
+		}
 	};
 
 	// Called on all touch events from the PanResponder
@@ -227,10 +216,7 @@ export default class Trainer extends React.Component {
 		return (
 			<View>
 				{/* The Original RN-Draw Component */}
-				<View
-					onLayout={this._onLayoutContainer}
-					style={[styles.drawContainer, this.props.containerStyle]}
-				>
+				<View onLayout={this._onLayoutContainer} style={[styles.drawContainer, this.props.containerStyle]}>
 					<View style={styles.svgContainer} {...this._panResponder.panHandlers}>
 						<Svg style={styles.drawSurface}>
 							<G>
@@ -252,9 +238,7 @@ export default class Trainer extends React.Component {
 					</View>
 				</View>
 
-				<View style={styles.button}>
-					<Button onPress={this.exportGestureClass} title={"Export"}/>
-				</View>
+				<View>
 					<Button onPress={this.clear} title="Clear" />
 					<Button onPress={this.exportGestureClass} title="Export" />
 					<Button onPress={this.rewind} title="Undo" />
