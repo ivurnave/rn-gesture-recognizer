@@ -1,6 +1,6 @@
 {
   "name": "rn-gesture-recognizer",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A library for gesture recognition in React Native. Built off of the rn-draw package.",
   "main": "index.js",
   "scripts": {
