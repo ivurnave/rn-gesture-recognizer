@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, PanResponder, StyleSheet} from 'react-native';
+import {View, PanResponder, StyleSheet, Button} from 'react-native';
 import Pen from '../tools/pen';
 import Point from '../tools/point';
 import humps from 'humps';
