@@ -1,8 +1,7 @@
 import React from 'react';
-import {View, PanResponder, StyleSheet, Button} from 'react-native';
+import {View, PanResponder, StyleSheet, Button, TextInput} from 'react-native';
 import Pen from '../tools/pen';
 import Point from '../tools/point';
-import humps from 'humps';
 import Svg, {G, Path} from 'react-native-svg';
 let RNFS = require('react-native-fs'); // for writing json files
 
@@ -15,6 +14,7 @@ export default class Trainer extends React.Component {
 			newStroke: [],
 			gestureClassPoints: [],
 			pen: new Pen(),
+			currGestureClassName: "gestureClassName",
 		};
 
 		this._panResponder = PanResponder.create({
@@ -87,9 +87,13 @@ export default class Trainer extends React.Component {
 	// Write the current gesture class to the gestureClasses.json file
 	exportGestureClass = () => {
 		// console.log(this.state.gestureClassPoints);
-		if (this.state.gestureClassPoints.length != 0) {
+		if (this.state.gestureClassPoints.length != 0 && this.state.currGestureClassName.length != 0) {
 			const path = this.props.path + '/gestureClasses.json';
-			RNFS.writeFile(path, JSON.stringify(this.state.gestureClassPoints), 'utf8')
+			var writeObj = {
+				'gestureClassName': this.state.currGestureClassName,
+				'trainingGestures': this.state.gestureClassPoints,
+			}
+			RNFS.writeFile(path, JSON.stringify(writeObj), 'utf8')
 				.then(success => {
 					console.log('gestureClasses written!');
 				})
@@ -144,7 +148,6 @@ export default class Trainer extends React.Component {
 			type: 'Path',
 			attributes: {
 				d: this.state.pen.pointsToSvg(points),
-				// stroke: this.props.color || '#000000',
 				stroke: '#9b6ed69e', // added stroke will be a different color and partially transparent
 				strokeWidth: this.props.strokeWidth || 4,
 				fill: 'none',
@@ -185,36 +188,10 @@ export default class Trainer extends React.Component {
 		return null;
 	};
 
-	convertStrokesToSvg = (strokes, layout = {}) => {
-		return `
-			<svg xmlns="http://www.w3.org/2000/svg" width="${layout.width}" height="${
-					layout.height
-				}" version="1.1">
-				<g>
-					${strokes.map(e => {
-						return `<${e.type.toLowerCase()} ${Object.keys(e.attributes)
-							.map(a => {
-								return `${humps.decamelize(a, {separator: '-'})}="${
-									e.attributes[a]
-								}"`;
-							})
-							.join(' ')}/>`;
-					})
-						.join('\n')}
-				</g>
-			</svg>
-		`;
-	};
-
-	exportToSVG = () => {
-		const strokes = [...this.state.previousStrokes];
-		return convertStrokesToSvg(strokes, this._layout);
-	};
-
 	render() {
 		console.log(this.state.gestureClassPoints);
 		return (
-			<View>
+			<View style={{flex: 1, alignItems: 'stretch'}}>
 				{/* The Original RN-Draw Component */}
 				<View onLayout={this._onLayoutContainer} style={[styles.drawContainer, this.props.containerStyle]}>
 					<View style={styles.svgContainer} {...this._panResponder.panHandlers}>
@@ -238,7 +215,11 @@ export default class Trainer extends React.Component {
 					</View>
 				</View>
 
-				<View>
+				<TextInput
+					style={styles.nameClass}
+					onChangeText={(text) => this.setState({currGestureClassName: text})}
+					value={this.state.currGestureClassName}/>
+				<View style={styles.button}>
 					<Button onPress={this.clear} title="Clear" />
 					<Button onPress={this.exportGestureClass} title="Export" />
 					<Button onPress={this.rewind} title="Undo" />
@@ -252,6 +233,7 @@ let styles = StyleSheet.create({
 	drawContainer: {
 		flex: 1,
 		display: 'flex',
+		backgroundColor: '#e0e4e5',
 	},
 	svgContainer: {
 		flex: 1,
@@ -262,5 +244,9 @@ let styles = StyleSheet.create({
 	button: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
+		backgroundColor: '#c1c1ba'
 	},
+	nameClass: {
+		justifyContent: 'center',
+	}
 });

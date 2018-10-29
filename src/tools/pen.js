@@ -18,17 +18,17 @@ export default class Pen {
 
   setOffset(options) {
     if (!options) return
-    this._offsetX = options.x;
-    this._offsetY = options.y;
+    this._offsetX = options.X;
+    this._offsetY = options.Y;
   }
 
   pointsToSvg(points) {
     let offsetX = this._offsetX;
     let offsetY = this._offsetY;
     if (points.length > 0) {
-      var path = `M ${points[0].x},${points[0].y}`
+      var path = `M ${points[0].X},${points[0].Y}`
       points.forEach((point) => {
-        path = path + ` L ${point.x},${point.y}`
+        path = path + ` L ${point.X},${point.Y}`
       });
       return path;
     } else {

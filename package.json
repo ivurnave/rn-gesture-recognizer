@@ -32,7 +32,5 @@
     "react-native-svg": "*",
     "react-native-fs": "*"
   },
-  "dependencies": {
-    "humps": "2.0.1"
-  }
+  "dependencies": {}
 }
