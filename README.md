@@ -36,8 +36,7 @@ import {Trainer} from 'rn-gesture-recognizer';
   strokes={[]}
   containerStyle={{backgroundColor: 'rgba(0,0,0,0.01)'}}
   color={'#000000'}
-  strokeWidth={4}
-  
+  strokeWidth={4} 
 />
 ```
 
