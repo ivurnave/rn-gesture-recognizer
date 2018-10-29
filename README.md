@@ -26,34 +26,31 @@ expo version = 22 or react native = 49 w/ react 16 beta 5 --- >= rn-draw@0.0.5
 
 
 # How to use the Trainer
-The **Trainer** component is used to help you generate the custom gestures you would like the **Recognizer** component to be able to recognize. The Trainer uses `react-native-fs` to write the `gestureClasses.json` file to your project directory, which you will import as a prop to the Recognizer component later on.
+The **Trainer** component is used to help you generate the custom gestures you would like the **Recognizer** component to be able to recognize. The Trainer uses `react-native-fs` to write the `gestureClasses.json` file to your project directory, which you will import as a prop to the Recognizer component later on. See [this example](https://github.com/ivurnave/rn-gesture-recognizer-testproj) to see how it can be set up in a project.
 
 ```javascript
 import {Trainer} from 'rn-gesture-recognizer';
 
 <Trainer
+  path={'/Users/evan/Documents/example-proj'}
   strokes={[]}
-  // containerStyle={{backgroundColor: 'rgba(0,0,0,0.01)'}}
-  // color={'#000000'}
-  // strokeWidth={4}
-  // onChangeStrokes={(strokes) => console.log(strokes)}
+  containerStyle={{backgroundColor: 'rgba(0,0,0,0.01)'}}
+  color={'#000000'}
+  strokeWidth={4}
+  
 />
 ```
 
 ### Props
+**path** [String] _required!_ - the absolute path to where you want your training data to be stored.
+
 **strokes** [Array] - set with some initial data. (defaults to [])
 
 **containerStyle** [Object] - style for the container of the draw component.
 
 **color** [String] - string representation of pen color (defaults to '#000000')
 
-<!-- **strokeWidth** [Number] - width of pen strokes (defaults to 4) -->
-
-<!-- **rewind** [Func] - a function for passing the draw component's undo functionality
-
-**clear** [Func] - a function for passing the draw component's clear functionality -->
-
-<!-- **onChangeStrokes** [Func] - callback that is called when the draw changes. -->
+**strokeWidth** [Number] - width of pen strokes (defaults to 4)
 
 # How to use the Recognizer
 The **Recognizer** component is built to use the `gestureClasses.json` data file to recognize user input. It handles much the same as the Trainer component, but has more props to allow for developer customization.
