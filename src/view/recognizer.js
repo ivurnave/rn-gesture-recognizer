@@ -1,10 +1,11 @@
 import React from 'react';
-import {View, PanResponder, StyleSheet, Button} from 'react-native';
+import {View, PanResponder, StyleSheet} from 'react-native';
 import Pen from '../tools/pen';
 import Point from '../tools/point';
-import humps from 'humps';
 import Svg, {G, Path} from 'react-native-svg';
-let RNFS = require('react-native-fs'); // for writing json files
+
+const gestureRecognizer = require('../tools/rubine.js');
+let myGestureRecognizer = new gestureRecognizer();
 
 export default class Recognizer extends React.Component {
 	constructor(props, context) {
@@ -13,8 +14,8 @@ export default class Recognizer extends React.Component {
 			currentPoints: [],
 			previousStrokes: this.props.strokes || [],
 			newStroke: [],
-			gestureClassPoints: [],
 			pen: new Pen(),
+			gesture: ''
 		};
 
 		this._panResponder = PanResponder.create({
@@ -24,6 +25,12 @@ export default class Recognizer extends React.Component {
 			onPanResponderMove: (evt, gs) => this.onResponderMove(evt, gs),
 			onPanResponderRelease: (evt, gs) => this.onResponderRelease(evt, gs),
 		});
+		const rewind = props.rewind || function() {};
+		const clear = props.clear || function() {};
+		this._clientEvents = {
+			rewind: rewind(this.rewind),
+			clear: clear(this.clear),
+		};
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -153,12 +160,32 @@ export default class Recognizer extends React.Component {
 			},
 		};
 
+		let currentGesture;
+		let newShape;
+		if (this.state.currentPoints.length > 3) {;
+			currentGesture = myGestureRecognizer.classifyGesture(this.state.currentPoints);
+			console.log(currentGesture);
+			if (currentGesture === 'circle' ) {
+				newShape = this.renderCircle();
+			}
+			else if (currentGesture === 'line') {
+				newShape = this.renderLine();
+			}
+			else if (currentGesture === 'carat') {
+				newShape = this.renderCaret();
+			}
+			else if (currentGesture === 'arch') {
+				newShape = this.renderArch();
+			}
+		}
+
 		this.state.pen.addStroke(points);
 		this.setState(
 			{
 				previousStrokes: [...this.state.previousStrokes, newElement],
 				gestureClassPoints: [...this.state.gestureClassPoints, points],
 				currentPoints: [],
+				gesture: currentGesture,
 			},
 			() => {
 				this._onChangeStrokes(this.state.previousStrokes);
@@ -183,32 +210,6 @@ export default class Recognizer extends React.Component {
 		}
 
 		return null;
-	};
-
-	convertStrokesToSvg = (strokes, layout = {}) => {
-		return `
-			<svg xmlns="http://www.w3.org/2000/svg" width="${layout.width}" height="${
-					layout.height
-				}" version="1.1">
-				<g>
-					${strokes.map(e => {
-						return `<${e.type.toLowerCase()} ${Object.keys(e.attributes)
-							.map(a => {
-								return `${humps.decamelize(a, {separator: '-'})}="${
-									e.attributes[a]
-								}"`;
-							})
-							.join(' ')}/>`;
-					})
-						.join('\n')}
-				</g>
-			</svg>
-		`;
-	};
-
-	exportToSVG = () => {
-		const strokes = [...this.state.previousStrokes];
-		return convertStrokesToSvg(strokes, this._layout);
 	};
 
 	render() {
@@ -237,12 +238,6 @@ export default class Recognizer extends React.Component {
 						{this.props.children}
 					</View>
 				</View>
-
-				<View>
-					<Button onPress={this.clear} title="Clear" />
-					<Button onPress={this.exportGestureClass} title="Export" />
-					<Button onPress={this.rewind} title="Undo" />
-				</View>
 			</View>
 		);
 	}
@@ -259,8 +254,247 @@ let styles = StyleSheet.create({
 	drawSurface: {
 		flex: 1,
 	},
-	button: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-	},
 });
+
+// import React from 'react'
+// import {
+//   View,
+//   PanResponder,
+//   StyleSheet,
+//   Platform,
+//   Image,
+//   Button
+// } from 'react-native'
+// import {Svg} from '../config'
+// const {
+//   G, 
+//   Surface, 
+//   Path
+// } = Svg
+
+// const gestureRecognizer = require('../../../../testAlgorithm.js');
+const gestureRecognizer = require('../tools/rubine.js');
+let myGestureRecognizer = new gestureRecognizer();
+// export default class Whiteboard extends React.Component {
+//   constructor(props, context) {
+//     super(props, context);
+//     this.state = {
+//       tracker: 0,
+//       currentPoints: [],
+//       previousStrokes: [],
+//       newStroke: [],
+//       pen: new Pen(),
+//       gesture: '',
+//       images: [],
+//       shapes: []
+//     }
+//     this._panResponder = PanResponder.create({
+//       onStartShouldSetPanResponder: (evt, gs) => true,
+//       onMoveShouldSetPanResponder: (evt, gs) => true,
+//       onPanResponderGrant: (evt, gs) => this.onResponderGrant(evt, gs),
+//       onPanResponderMove: (evt, gs) => this.onResponderMove(evt, gs),
+//       onPanResponderRelease: (evt, gs) => this.onResponderRelease(evt, gs)
+//     })
+//     const rewind = props.rewind || function (){}
+//     const clear = props.clear || function (){}
+//     // const renderImage = props.renderImage || function(){}
+//     this._clientEvents = {
+//       rewind: rewind(this.rewind),
+//       clear: clear(this.clear),
+//       // renderImage: renderImage(),
+//     }
+    
+//   }
+//   rewind = () => {
+//     if (this.state.currentPoints.length > 0 || this.state.previousStrokes.length < 1) return
+//     let strokes = this.state.previousStrokes
+//     strokes.pop()
+//     this.state.pen.rewindStroke()
+    
+//     this.setState({
+//       previousStrokes: [...strokes],
+//       currentPoints: [],
+//       tracker: this.state.tracker - 1,
+//     })
+//   }
+//   clear = () => {
+//     this.setState({
+//       previousStrokes: [],
+//       currentPoints: [],
+//       newStroke: [],
+//       tracker: 0,
+//     })
+//     this.state.pen.clear()
+//   }
+//   removeShape = () => {
+//     let shapes = this.state.shapes;
+//     shapes.splice(0, 1);
+//     this.setState({
+//       shapes: shapes,
+//     });
+//   }
+//   renderCircle = () => {
+//     return (
+//         <Image
+//           style={{width: 40, height: 40}}
+//           source={require('../../../../assets/circle.png')}
+//         />
+//     )
+//   }
+//   renderLine = () => {
+//     return (
+//         <Image
+//           style={{width: 40, height: 40}}
+//           source={require('../../../../assets/line.png')}
+//         />
+//     )
+//   }
+//   renderCaret = () => {
+//     return (
+//         <Image
+//           style={{width: 40, height: 40}}
+//           source={require('../../../../assets/caret.jpg')}
+//         />
+//     )
+//   }
+//   renderArch = () => {
+//     return (
+//         <Image
+//           style={{width: 40, height: 40}}
+//           source={require('../../../../assets/arch.png')}
+//         />
+//     )
+//   }
+//   // componentDidMount() {
+//   //   this.setTimeout(function() {
+//   //     return (
+//   //       <Image
+//   //         style={{width: 40, height: 40}}
+//   //         source={require('../../../../assets/hand.png')}
+//   //       />
+//   //       )
+//   //   }, 10);
+//   // }
+//   onTouch(evt) {
+//     let x, y, timestamp
+//     [x, y, timestamp] = [evt.nativeEvent.locationX, evt.nativeEvent.locationY, evt.nativeEvent.timestamp]
+//     let newPoint = new Point(x, y, timestamp)
+//     let newCurrentPoints = this.state.currentPoints
+//     newCurrentPoints.push(newPoint)
+//     this.setState({
+//       previousStrokes: this.state.previousStrokes,
+//       currentPoints: newCurrentPoints,
+//       tracker: this.state.tracker
+//     })
+//   }
+//   onResponderGrant(evt) {
+//     this.onTouch(evt);
+//   }
+//   onResponderMove(evt) {
+//     this.onTouch(evt);
+//   }
+//   onResponderRelease() {
+//     let strokes = this.state.previousStrokes
+//     if (this.state.currentPoints.length < 1) return
+//     let newElement = (
+//       <Path
+//         key={this.state.tracker}
+//         d={this.state.pen.pointsToSvg(this.state.currentPoints)}
+//         stroke={this.props.color || '#000000'}
+//         strokeWidth={this.props.strokeWidth || 4}
+//         fill="none"
+//       />
+//     )
+//     let currentGesture;
+//     let newShape;
+//     if (this.state.currentPoints.length > 3) {
+//           console.log("here!");
+//           currentGesture = myGestureRecognizer.classifyGesture(this.state.currentPoints);
+//           console.log(currentGesture);
+//           if (currentGesture === 'circle' ) {
+//             newShape = this.renderCircle();
+//           }
+//           else if (currentGesture === 'line') {
+//             newShape = this.renderLine();
+//           }
+//           else if (currentGesture === 'carat') {
+//             newShape = this.renderCaret();
+//           }
+//           else if (currentGesture === 'arch') {
+//             newShape = this.renderArch();
+//           }
+//         }
+//     this.state.pen.addStroke(this.state.currentPoints)
+    
+//     this.setState({
+//       previousStrokes: [...this.state.previousStrokes, newElement],
+//       currentPoints: [],
+//       tracker: this.state.tracker + 1,
+//       gesture: currentGesture,
+//       shapes: [newShape, ...this.state.shapes]
+//     })
+//     this.clear();
+//   }
+//   _onLayoutContainer = (e) => {
+//     this.state.pen.setOffset(e.nativeEvent.layout);
+//   }
+//   render() {
+//     return (
+//       <View
+//         onLayout={this._onLayoutContainer}
+//         style={[
+//           styles.drawContainer,
+//           this.props.containerStyle,
+//         ]}>
+//         <View style={styles.shapes}>  {this.state.shapes} </View>
+//         <View style={styles.svgContainer} {...this._panResponder.panHandlers}>
+//           <Svg style={styles.drawSurface}>
+//             <G>
+//               {this.state.previousStrokes}
+//               <Path
+//                 key={this.state.tracker}
+//                 d={this.state.pen.pointsToSvg(this.state.currentPoints)}
+//                 stroke={this.props.color || "#000000"}
+//                 strokeWidth={this.props.strokeWidth || 4}
+//                 fill="none"
+//               />
+//             </G>
+//           </Svg>
+//           {this.props.children}
+//            <Button style={styles.button}
+//           onPress={this.removeShape}
+//           title="Undo"
+//         />
+//         </View>
+       
+//       </View>
+//     )
+//   }
+// }
+// let styles = StyleSheet.create({
+//   drawContainer: {
+//     flex: 1,
+//     display: 'flex',
+//     flexDirection: 'row',
+//   },
+//   svgContainer: {
+//     flex: 4,
+//   },
+//   drawSurface: {
+//     flex: 1,
+//   },
+//   shapes: {
+//     flex: 1,
+//     alignSelf: 'flex-end',
+//     position: 'absolute',
+//     bottom: -50,
+//     left: 0,
+//   },
+//   button: {
+//     alignSelf: 'flex-end',
+//     position: 'absolute',
+//     bottom: -50,
+//     left: 0,
+//   }
+// })
+

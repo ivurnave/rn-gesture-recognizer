@@ -32,5 +32,7 @@
     "react-native-svg": "*",
     "react-native-fs": "*"
   },
-  "dependencies": {}
+  "dependencies": {
+    "mathjs": "5.2.3"
+  }
 }
