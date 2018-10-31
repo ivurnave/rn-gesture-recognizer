@@ -16,14 +16,7 @@ Then, install rn-gesture-recognizer with `npm install --save rn-gesture-recogniz
 ### Expo Applications
 Make sure you follow the proper guidelines on https://expo.io to set up your react native application with expo sdk.
 
-Install rn-draw with `npm install --save rn-gesture-recognizer`.
-
-### Compatibility
-expo version <= 21 or react native <= 48 w/ react 16 alpha 12 --- rn-draw@0.0.4
-
-expo version = 22 or react native = 49 w/ react 16 beta 5 --- >= rn-draw@0.0.5
-
-
+Install rn-gesture-recognizer with `npm install --save rn-gesture-recognizer`.
 
 # How to use the Trainer
 The **Trainer** component is used to help you generate the custom gestures you would like the **Recognizer** component to be able to recognize. The Trainer uses `react-native-fs` to write the `gestureClasses.json` file to your project directory, which you will import as a prop to the Recognizer component later on. See [this example](https://github.com/ivurnave/rn-gesture-recognizer-testproj) to see how it can be set up in a project.
