@@ -1,55 +1,5 @@
 
-let line = new Array(
-    new Array(new Point2(0, 0), new Point2(-2, -16), new Point2(-7, -41), new Point2(-11, -72), new Point2(-12, -125), new Point2(-6, -184), new Point2(0, -234), new Point2(2, -267), new Point2(2, -283)),
-
-    new Array(new Point2(0, 0), new Point2(-1, 2), new Point2(-3, 9), new Point2(-5, 20), new Point2(-6, 43), new Point2(-9, 69), new Point2(-11, 88), new Point2(-16, 107), new Point2(-19, 115), new Point2(-19, 117), new Point2(-19, 123), new Point2(-15, 135), new Point2(-14, 144), new Point2(-14, 147), new Point2(-12, 152)),
-    
-    new Array(new Point2(0, 0), new Point2(0, 1), new Point2(0, 2), new Point2(0, 4), new Point2(0, 5), new Point2(0, 6), new Point2(1, 6), new Point2(1, 7), new Point2(1, 9), new Point2(1, 10), new Point2(1, 12), new Point2(1, 14), new Point2(1, 15), new Point2(1, 16), new Point2(1, 17), new Point2(2, 19), new Point2(2, 20), new Point2(2, 21), new Point2(2, 22), new Point2(4, 23), new Point2(4, 25), new Point2(4, 26), new Point2(4, 27), new Point2(4, 28), new Point2(4, 30), new Point2(4, 31), new Point2(4, 32), new Point2(4, 33), new Point2(4, 35), new Point2(4, 36), new Point2(4, 37), new Point2(4, 38), new Point2(4, 40), new Point2(2, 41), new Point2(2, 42), new Point2(2, 43), new Point2(1, 45), new Point2(1, 46), new Point2(1,47), new Point2(1, 48), new Point2(0, 48), new Point2(0, 51), new Point2(0, 52), new Point2(0, 53), new Point2(-1, 53), new Point2(-1, 54), new Point2(-1, 56), new Point2(-1, 57), new Point2(-1, 58), new Point2(-1, 59), new Point2(-1, 61), new Point2(-1, 62), new Point2(-1, 63), new Point2(-1, 64), new Point2(-1, 66), new Point2(-1, 68), new Point2(-1, 69), new Point2(-1, 70), new Point2(-1, 72), new Point2(-1, 73), new Point2(-1, 74), new Point2(-1, 75), new Point2(-1, 77), new Point2(-1, 78), new Point2(-1, 79), new Point2(-1, 80), new Point2(-1, 82), new Point2(-1, 83), new Point2(-1, 84), new Point2(-1, 85), new Point2(-1, 87), new Point2(-1, 88), new Point2(-1, 89), new Point2(-1, 90), new Point2(-1, 91), new Point2(-1, 94), new Point2(-1, 95), new Point2(-1, 96), new Point2(-1, 99), new Point2(-1, 100), new Point2(-1, 101), new Point2(-1, 103), new Point2(-1, 104), new Point2(-1, 105), new Point2(-1, 106), new Point2(-1, 108), new Point2(-1, 109), new Point2(-2, 111), new Point2(-2, 112), new Point2(-2, 114), new Point2(-2, 115), new Point2(-2, 116), new Point2(-2, 117), new Point2(-2, 119), new Point2(-2, 120), new Point2(-4, 126), new Point2(-4, 130), new Point2(-5, 131), new Point2(-5, 132), new Point2(-5, 133), new Point2(-5, 135), new Point2(-5, 136), new Point2(-5, 137), new Point2(-5, 140), new Point2(-5, 141), new Point2(-5, 142), new Point2(-5, 143)),
-    
-    new Array(new Point2(0,0),new Point2(0,-17),new Point2(0,-92),new Point2(3,-189),new Point2(9,-232)),
-    
-    new Array(new Point2(0,0),new Point2(0,4),new Point2(4,16),new Point2(6,44),new Point2(6,79),new Point2(6,128),new Point2(1,194),new Point2(-1,241),new Point2(-1,269),new Point2(-1,280)),
-    
-    new Array(new Point2(0,0),new Point2(0,2),new Point2(-1,4),new Point2(-1,9),new Point2(-2,17),new Point2(-2,24),new Point2(-2,29),new Point2(-2,32),new Point2(-2,33),new Point2(-2,34)),
-);
-
-let carat = new Array(
-    new Array(new Point2(0,0),new Point2(2,-3),new Point2(6,-12),new Point2(26,-51),new Point2(74,-133),new Point2(83,-151),new Point2(86,-154),new Point2(87,-154),new Point2(88,-154),new Point2(94,-151),new Point2(111,-143),new Point2(137,-130),new Point2(157,-116),new Point2(175,-91),new Point2(187,-68),new Point2(195,-47),new Point2(201,-32),new Point2(204,-17),new Point2(205,-7),new Point2(206,-3),new Point2(206,-1),new Point2(206,0),new Point2(206,1)),
-
-    new Array(new Point2(0,0),new Point2(-5,-6),new Point2(-17,-17),new Point2(-56,-60),new Point2(-78,-87),new Point2(-109,-109),new Point2(-115,-108),new Point2(-129,-101),new Point2(-155,-80),new Point2(-182,-50),new Point2(-199,-22),new Point2(-209,-1),new Point2(-214,12),new Point2(-218,20)),
-
-    new Array(new Point2(0,0),new Point2(-1,-4),new Point2(-2,-23),new Point2(3,-35),new Point2(10,-51),new Point2(18,-64),new Point2(29,-82),new Point2(59,-120),new Point2(69,-132),new Point2(77,-139),new Point2(84,-145),new Point2(91,-150),new Point2(99,-154),new Point2(107,-156),new Point2(113,-157),new Point2(122,-157),new Point2(128,-155),new Point2(139,-144),new Point2(144,-134),new Point2(148,-121),new Point2(152,-106),new Point2(156,-90),new Point2(162,-72),new Point2(168,-54),new Point2(172,-36),new Point2(177,-25),new Point2(179,-18),new Point2(181,-12),new Point2(183,-8),new Point2(184,-4)),
-
-    new Array(new Point2(0,0),new Point2(-1,1),new Point2(-2,1),new Point2(-3,0),new Point2(-5,-2),new Point2(-8,-6),new Point2(-10,-10),new Point2(-16,-19),new Point2(-18,-23),new Point2(-20,-28),new Point2(-22,-32),new Point2(-25,-37),new Point2(-28,-43),new Point2(-31,-48),new Point2(-38,-59),new Point2(-42,-65),new Point2(-46,-73),new Point2(-51,-80),new Point2(-56,-85),new Point2(-61,-92),new Point2(-65,-98),new Point2(-68,-102),new Point2(-71,-105),new Point2(-75,-108),new Point2(-78,-112),new Point2(-82,-115),new Point2(-85,-119),new Point2(-89,-122),new Point2(-93,-124),new Point2(-97,-127),new Point2(-101,-130),new Point2(-104,-132),new Point2(-106,-134),new Point2(-108,-135), new Point2(-111,-138),new Point2(-112,-139),new Point2(-113,-140),new Point2(-114,-141),new Point2(-115,-142),new Point2(-116,-142),new Point2(-117,-141),new Point2(-118,-140),new Point2(-119,-139),new Point2(-120,-138),new Point2(-123,-135),new Point2(-126,-130),new Point2(-131,-125),new Point2(-140,-112),new Point2(-149,-97),new Point2(-154,-89),new Point2(-156,-86),new Point2(-158,-81),new Point2(-160,-77),new Point2(-162,-73),new Point2(-164,-69),new Point2(-166,-65),new Point2(-168,-60),new Point2(-170,-55),new Point2(-171,-51),new Point2(-173,-46),new Point2(-175,-42),new Point2(-178,-37),new Point2(-182,-32),new Point2(-185,-27),new Point2(-187,-22),new Point2(-190,-17),new Point2(-192,-12),new Point2(-195,-7),new Point2(-198,-2),new Point2(-202,3),new Point2(-204,6),new Point2(-205,8),new Point2(-206,9),new Point2(-206,10),new Point2(-207,10),new Point2(-207,11)),
-
-    new Array(new Point2(0,0),new Point2(28,-71),new Point2(135,-150),new Point2(187,-134),new Point2(207,-109),new Point2(219,-73),new Point2(215,28)),
-
-    new Array(new Point2(0,0),new Point2(14,-22),new Point2(27,-48),new Point2(35,-59),new Point2(44,-71),new Point2(45,-72),new Point2(45,-71),new Point2(48,-68),new Point2(53,-63),new Point2(64,-53),new Point2(71,-47),new Point2(78,-42),new Point2(86,-36),new Point2(102,-27),new Point2(107,-23),new Point2(109,-21),new Point2(112,-20),new Point2(113,-20))
-);
-
-let circle= new Array(
-    new Array(new Point2(0,0),new Point2(-21,-5),new Point2(-75,-20),new Point2(-107,-34),new Point2(-133,-47),new Point2(-155,-62),new Point2(-175,-76),new Point2(-197,-102),new Point2(-217,-130),new Point2(-223,-148),new Point2(-222,-160),new Point2(-215,-175),new Point2(-198,-196),new Point2(-166,-220),new Point2(-114,-243),new Point2(-62,-255),new Point2(-38,-256),new Point2(-28,-250),new Point2(-17,-238),new Point2(-7,-223),new Point2(1,-204),new Point2(14,-181),new Point2(23,-150),new Point2(28,-119),new Point2(25,-88),new Point2(20,-70),new Point2(11,-55),new Point2(-4,-38),new Point2(-20,-25),new Point2(-36,-18),new Point2(-49,-14)),
-
-    new Array(new Point2(0,0),new Point2(-5,0),new Point2(-12,1),new Point2(-18,3),new Point2(-24,5),new Point2(-40,9),new Point2(-52,10),new Point2(-88,3),new Point2(-98,-4),new Point2(-107,-14),new Point2(-117,-29),new Point2(-127,-51),new Point2(-139,-73),new Point2(-149,-91),new Point2(-156,-106),new Point2(-163,-119),new Point2(-166,-132),new Point2(-166,-146),new Point2(-164,-159),new Point2(-160,-174),new Point2(-156,-184),new Point2(-149,-196),new Point2(-138,-208),new Point2(-121,-222),new Point2(-103,-235),new Point2(-88,-243),new Point2(-76,-250),new Point2(-62,-254),new Point2(-46,-257),new Point2(-28,-259),new Point2(-11,-259),new Point2(4,-257),new Point2(15,-254),new Point2(27,-248),new Point2(36,-240),new Point2(46,-231),new Point2(54,-222),new Point2(62,-209),new Point2(67,-199),new Point2(71,-190),new Point2(74,-181),new Point2(76,-170),new Point2(79,-159),new Point2(79,-145),new Point2(79,-131),new Point2(77,-116),new Point2(74,-101),new Point2(68,-86),new Point2(61,-71),new Point2(55,-59),new Point2(51,-47),new Point2(46,-38),new Point2(39,-30),new Point2(33,-24),new Point2(26,-19),new Point2(19,-15),new Point2(12,-12),new Point2(5,-8),new Point2(1,-6),new Point2(-3,-5),new Point2(-9,-5),new Point2(-14,-4),new Point2(-17,-4)),
-
-    new Array(new Point2(0,0),new Point2(-2,-4),new Point2(-3,-20),new Point2(-1,-31),new Point2(3,-39),new Point2(8,-46),new Point2(15,-50),new Point2(24,-54),new Point2(34,-58),new Point2(49,-61),new Point2(63,-62),new Point2(76,-61),new Point2(87,-56),new Point2(95,-52),new Point2(102,-45),new Point2(108,-36),new Point2(114,-29),new Point2(119,-20),new Point2(124,-10),new Point2(131,0),new Point2(136,13),new Point2(141,24),new Point2(144,40),new Point2(147,58),new Point2(148,77),new Point2(148,97),new Point2(145,116),new Point2(140,136),new Point2(132,156),new Point2(111,189),new Point2(98,208),new Point2(84,221),new Point2(66,232),new Point2(47,236),new Point2(29,235),new Point2(9,227),new Point2(-13,214),new Point2(-34,199),new Point2(-53,183),new Point2(-71,163),new Point2(-84,142),new Point2(-98,120),new Point2(-106,100),new Point2(-110,84),new Point2(-112,67),new Point2(-110,47),new Point2(-106,28),new Point2(-98,11),new Point2(-87,-4),new Point2(-72,-18),new Point2(-53,-35),new Point2(-31,-49),new Point2(-9,-60),new Point2(5,-65),new Point2(11,-67),new Point2(17,-67),new Point2(28,-68),new Point2(42,-67),new Point2(59,-68),new Point2(70,-68),new Point2(75,-68),new Point2(78,-67),new Point2(79,-67)),
-
-    new Array(new Point2(0,0),new Point2(0,-7),new Point2(1,-13),new Point2(5,-31),new Point2(10,-43),new Point2(18,-52),new Point2(31,-64),new Point2(50,-74),new Point2(77,-87),new Point2(107,-95),new Point2(128,-98),new Point2(142,-95),new Point2(157,-90),new Point2(171,-82),new Point2(181,-68),new Point2(191,-50),new Point2(197,-30),new Point2(200,-7),new Point2(199,19),new Point2(197,41),new Point2(192,57),new Point2(179,83),new Point2(165,105),new Point2(154,123),new Point2(144,137),new Point2(134,145),new Point2(120,149),new Point2(102,148),new Point2(82,141),new Point2(63,128),new Point2(45,109),new Point2(28,90),new Point2(11,66),new Point2(-1,48),new Point2(-4,35),new Point2(-5,24),new Point2(-4,14),new Point2(-2,8)),
-
-    new Array(new Point2(0,0),new Point2(-7,4),new Point2(-13,7),new Point2(-32,8),new Point2(-45,4),new Point2(-57,-4),new Point2(-72,-29),new Point2(-72,-40),new Point2(-67,-53),new Point2(-56,-69),new Point2(-37,-86),new Point2(-18,-98),new Point2(-5,-104),new Point2(5,-107),new Point2(14,-104),new Point2(25,-98),new Point2(35,-89),new Point2(42,-77),new Point2(46,-61),new Point2(47,-45),new Point2(44,-28),new Point2(36,-12),new Point2(27,1),new Point2(14,12),new Point2(1,21),new Point2(-19,22),new Point2(-26,17),new Point2(-30,13),new Point2(-32,11))
-);
-
-let arch = new Array(
-    new Array(new Point2(0,0),new Point2(-3,-18),new Point2(-11,-40),new Point2(-23,-79),new Point2(-40,-122),new Point2(-49,-158),new Point2(-55,-188),new Point2(-56,-210),new Point2(-56,-224),new Point2(-53,-231),new Point2(-51,-238),new Point2(-46,-248),new Point2(-39,-263),new Point2(-23,-278),new Point2(-3,-292),new Point2(24,-304),new Point2(57,-317),new Point2(94,-327),new Point2(116,-331),new Point2(127,-331),new Point2(137,-330),new Point2(148,-328),new Point2(160,-321),new Point2(173,-314),new Point2(181,-305),new Point2(191,-289),new Point2(199,-268),new Point2(208,-242),new Point2(215,-211),new Point2(219,-183),new Point2(219,-155),new Point2(218,-133),new Point2(217,-118),new Point2(216,-106),new Point2(215,-100),new Point2(215,-95),new Point2(215,-91),new Point2(214,-90)),
-
-    new Array(new Point2(0,0),new Point2(-1,-2),new Point2(-2,-7),new Point2(-2,-21),new Point2(-5,-96),new Point2(-8,-130),new Point2(-10,-149),new Point2(-10,-162),new Point2(-11,-171),new Point2(-9,-175),new Point2(-8,-179),new Point2(-8,-180),new Point2(-7,-182),new Point2(-7,-183),new Point2(-6,-183),new Point2(-5,-183),new Point2(0,-184),new Point2(33,-195),new Point2(114,-216),new Point2(153,-223),new Point2(168,-226),new Point2(177,-227),new Point2(180,-228),new Point2(180,-227),new Point2(179,-227),new Point2(178,-226),new Point2(177,-226),new Point2(176,-225),new Point2(176,-224),new Point2(175,-222),new Point2(175,-217),new Point2(175,-188),new Point2(177,-154),new Point2(181,-103),new Point2(183,-45),new Point2(177,-6),new Point2(179,11),new Point2(179,23),new Point2(180,31),new Point2(180,33),new Point2(180,35),new Point2(181,38),new Point2(181,39),new Point2(182,40),new Point2(182,41)),
-    
-    new Array(new Point2(0,0),new Point2(0,-14),new Point2(1,-37),new Point2(2,-66),new Point2(8,-98),new Point2(11,-131),new Point2(13,-160),new Point2(15,-183),new Point2(15,-202),new Point2(15,-218),new Point2(20,-223),new Point2(33,-225),new Point2(57,-230),new Point2(91,-237),new Point2(119,-245),new Point2(129,-249),new Point2(130,-249),new Point2(132,-247),new Point2(133,-246),new Point2(134,-240),new Point2(140,-219),new Point2(146,-193),new Point2(155,-162),new Point2(164,-130),new Point2(172,-104),new Point2(177,-78),new Point2(177,-61),new Point2(177,-56),new Point2(178,-53),new Point2(181,-48),new Point2(185,-41),new Point2(187,-34),new Point2(188,-31)),
-
-    new Array(new Point2(0,0),new Point2(0,-15),new Point2(2,-39),new Point2(2,-72),new Point2(4,-95),new Point2(6,-103),new Point2(9,-108),new Point2(12,-111),new Point2(17,-113),new Point2(29,-117),new Point2(51,-123),new Point2(82,-127),new Point2(104,-127),new Point2(112,-122),new Point2(117,-114),new Point2(118,-98),new Point2(114,-78),new Point2(111,-58),new Point2(110,-41),new Point2(110,-27)),
-
-    new Array(new Point2(0,0),new Point2(0,-4),new Point2(-1,-5),new Point2(-5,-18),new Point2(-9,-33),new Point2(-14,-60),new Point2(-20,-86),new Point2(-27,-120),new Point2(-35,-154),new Point2(-37,-180),new Point2(-37,-198),new Point2(-38,-209),new Point2(-38,-211),new Point2(-39,-216),new Point2(-41,-219),new Point2(-43,-219),new Point2(-60,-221),new Point2(-86,-224),new Point2(-124,-224),new Point2(-159,-224),new Point2(-186,-224),new Point2(-197,-221),new Point2(-197,-220),new Point2(-198,-214),new Point2(-200,-200),new Point2(-200,-184),new Point2(-200,-163),new Point2(-200,-145),new Point2(-200,-120),new Point2(-200,-95),new Point2(-198,-64),new Point2(-198,-27),new Point2(-198,17),new Point2(-202,53),new Point2(-202,84),new Point2(-202,105),new Point2(-202,121),new Point2(-202,137))
-);
+//TRAIN DATA: 
 
 let line2 = new Array(
 	// top to bottom
@@ -166,11 +116,142 @@ let arch3 = new Array(
 //
 // Point class
 //
+function spitPoints(points){
+	retStr = "[";
+	points.forEach(function(point) {
+		retStr += "("+point.X+","+point.Y+")"+",";
+	})
+	retStr.slice(0, -1);
+	retStr += "]";
+	console.log(retStr)
+}
+
 function Point2(x, y, timestamp) // constructor
 {
 	this.X = x;
 	this.Y = y;
 	this.time = timestamp;
+}
+
+// scaling function:
+const SquareSize = 500.0;
+const Origin = new Point2(0,0);
+
+// Rectangle class
+function Rectangle(x, y, width, height) // constructor
+{
+	this.X = x;
+	this.Y = y;
+	this.Width = width;
+	this.Height = height;
+}
+function BoundingBox(points)
+{
+	var minX = +Infinity, maxX = -Infinity, minY = +Infinity, maxY = -Infinity;
+	for (var i = 0; i < points.length; i++) {
+		minX = Math.min(minX, points[i].X);
+		minY = Math.min(minY, points[i].Y);
+		maxX = Math.max(maxX, points[i].X);
+		maxY = Math.max(maxY, points[i].Y);
+	}
+	return new Rectangle(minX, minY, maxX - minX, maxY - minY);
+}
+
+function Centroid(points)
+{
+	var x = 0.0, y = 0.0;
+	for (var i = 0; i < points.length; i++) {
+		x += points[i].X;
+		y += points[i].Y;
+	}
+	x /= points.length;
+	y /= points.length;
+	return new Point2(x, y);
+}
+
+function Resample(points, n)
+{
+	var I = PathLength(points) / (n - 1); // interval length
+	var D = 0.0;
+	var newpoints = new Array(points[0]);
+	for (var i = 1; i < points.length; i++)
+	{
+		var d = Distance(points[i-1], points[i]);
+		if ((D + d) >= I)
+		{
+			var qx = points[i-1].X + ((I - D) / d) * (points[i].X - points[i-1].X);
+			var qy = points[i-1].Y + ((I - D) / d) * (points[i].Y - points[i-1].Y);
+			var q = new Point2(qx, qy);
+			newpoints[newpoints.length] = q; // append new point 'q'
+			points.splice(i, 0, q); // insert 'q' at position i in points s.t. 'q' will be the next i
+			D = 0.0;
+		}
+		else D += d;
+	}
+	if (newpoints.length == n - 1) // somtimes we fall a rounding-error short of adding the last point, so add it if so
+		newpoints[newpoints.length] = new Point(points[points.length - 1].X, points[points.length - 1].Y);
+	return newpoints;
+}
+
+function IndicativeAngle(points)
+{
+	var c = Centroid(points);
+	return Math.atan2(c.Y - points[0].Y, c.X - points[0].X);
+}
+
+function RotateBy(points, radians) // rotates points around centroid
+{
+	var c = Centroid(points);
+	var cos = Math.cos(radians);
+	var sin = Math.sin(radians);
+	var newpoints = new Array();
+	for (var i = 0; i < points.length; i++) {
+		var qx = (points[i].X - c.X) * cos - (points[i].Y - c.Y) * sin + c.X
+		var qy = (points[i].X - c.X) * sin + (points[i].Y - c.Y) * cos + c.Y;
+		newpoints[newpoints.length] = new Point2(qx, qy);
+	}
+	return newpoints;
+}
+
+function ScaleTo(points, size) // non-uniform scale; assumes 2D gestures (i.e., no lines)
+{
+	var B = BoundingBox(points);
+	if (B.Width == 0){
+		B.Width = 1;
+	}
+	if (B.Height == 0){
+		B.Height = 1;
+	}
+	var newpoints = new Array();
+	for (var i = 0; i < points.length; i++) {
+		var qx = points[i].X * (size / B.Width);
+		var qy = points[i].Y * (size / B.Height);
+		newpoints[newpoints.length] = new Point2(qx, qy);
+	}
+	return newpoints;
+}
+
+function TranslateTo(points, pt) // translates points' centroid
+{
+	var c = Centroid(points);
+	var newpoints = new Array();
+	for (var i = 0; i < points.length; i++) {
+		var qx = points[i].X + pt.X - c.X;
+		var qy = points[i].Y + pt.Y - c.Y;
+		newpoints[newpoints.length] = new Point2(qx, qy);
+	}
+	return newpoints;
+}
+
+function normalize(points){
+	console.log("NORMALIZING")
+
+	points = Resample(points, 200)		
+	// let radians = IndicativeAngle(points);
+	// points = RotateBy(points, -radians);
+	points = TranslateTo(points, Origin);
+	points = resize(points, SquareSize);
+	return points
 }
 
 
@@ -212,7 +293,7 @@ gestureClasses <- Array of gestureClass
 const NUM_FEATURES = 11;
 const math = require('mathjs');
 // var gestures = require('./exampleGestures.js');
-// console.log(gestures.line2);
+// `console.log(`gestures.line2);
 
 // helper function for f9
 function getAngle(p1, p2, p3) 
@@ -244,7 +325,9 @@ function getWidth(points)
 	return (maxX-minX);
 }
 
-function normalize(points){
+
+
+function resize(points, size){
 	var minX = +Infinity, maxX = -Infinity, minY = +Infinity, maxY = -Infinity;
 	for (var i = 0; i < points.length; i++) {
 		minX = Math.min(minX, points[i].X);
@@ -256,7 +339,7 @@ function normalize(points){
 	p2 = new Point2(maxX, maxY);
 	diag = Distance(p1,p2);
 
-	fact = 100/diag;
+	fact = size/diag;
 	points.forEach(point => {
 		point.X = point.X * fact;
 		point.Y = point.Y * fact;
@@ -567,10 +650,10 @@ let gestureRecognizer = class{
 		this._weight0sofAllVectors = new Array();
 		this._featureWeightsForClasses = new Array();
 
-		this.addGesture("line", line);
-		this.addGesture("carat", carat);
-		this.addGesture("circle", circle);
-		this.addGesture("arch", arch);		
+		this.addGesture("line", line2);
+		this.addGesture("carat", carat2);
+		this.addGesture("circle", circle2);
+		this.addGesture("arch", arch2);		
 		this.addGesture("line", line3);
 		this.addGesture("carat", carat3);
 		this.addGesture("circle", circle3);
@@ -588,14 +671,15 @@ let gestureRecognizer = class{
 
 		this._weight0sofAllVectors = getWeight0s(this._gestureClasses);
 		this._featureWeightsForClasses = getFeatureWeightsForClasses(this._gestureClasses);
-		console.log(this._numClasses);
 	}
 	
 	addGesture(className, gestureClass){
 		gestureClass.forEach(points => {
-			console.log("point before ::: \n",points);
-			// normalize(points);
-			console.log("point after ::: \n", points);
+			points = normalize(points);
+			console.log (className);
+			console.log (className);
+			console.log (className);
+			spitPoints(points)
 		});	
 		this._classNames.push(className);
 		this._gestureClasses.push(gestureClass);
@@ -611,8 +695,8 @@ let gestureRecognizer = class{
 	}
 
 	classifyGesture(points){
-		// normalize(points)
-		// console.log(JSON.stringify(points));
+		points =  normalize(points)
+		spitPoints(points);
 		let weightEval = new Array(this._numClasses);
 		let sum = 0;
 		let featureVector = getFeaturesForGesture(points);
@@ -639,10 +723,7 @@ let gestureRecognizer = class{
 		let maxWeightIndex = weights.indexOf(max);
 		let sum = 0;
 		for (let i=0; i<this._numClasses; i++){
-			// console.log(max, max - weights[i])
-			// console.log(Math.exp(max - weights[i]));
 			sum += Math.exp(weights[i] - max);
-			// console.log(sum);
 		}
 		return (1/sum);
 	}
@@ -665,10 +746,6 @@ let gestureRecognizer = class{
 module.exports = gestureRecognizer;
 
 let myGestureClass = new gestureRecognizer();
-// myGestureClass.addGesture("line", line2);
-// myGestureClass.addGesture("carat", carat2);
-// myGestureClass.addGesture("circle", circle2);
-// myGestureClass.addGesture("arch", arch2);
 
 let points = new Array(new Point2(0,0),new Point2(28,-71),new Point2(135,-150),new Point2(187,-134),new Point2(207,-109),new Point2(219,-73),new Point2(215,28));
 
@@ -707,29 +784,4 @@ let badArch = new Array(new Point2(0,0),new Point2(0,-3),new Point2(2,-9),new Po
 // console.log(myGestureClass.classifyGesture(circleTest3));
 // console.log(myGestureClass.classifyGesture(badArch));
 
-console.log(myGestureClass.classifyGesture(arch3[6]));
-
-
-
-//=======================
-
-
-
-
-// console.log(f1(points));
-// console.log(f2(points));
-// console.log(f3(points));
-// console.log(f4(points));
-// console.log(f5(points));
-// console.log(f6(points));
-// console.log(f7(points));
-// console.log(f8(points));
-// console.log(f9(points));
-// console.log(f10(points));
-// console.log(f11(points));
-
-
-
-// let gestureClass = 1;
-// let E = 10;
-
+// console.log(myGestureClass.classifyGesture(arch2[1]));
