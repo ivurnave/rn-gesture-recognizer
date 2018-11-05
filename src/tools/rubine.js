@@ -521,11 +521,11 @@ let gestureRecognizer = class{
 		this.addGesture("line", line2);
 		this.addGesture("carat", carat2);
 		this.addGesture("circle", circle2);
-		// this.addGesture("arch", arch2);
-		// this.addGesture("line", line3);
-		// this.addGesture("carat", carat3);
-		// this.addGesture("circle", circle3);
-		// this.addGesture("arch", arch3);	
+		this.addGesture("arch", arch2);
+		this.addGesture("line", line3);
+		this.addGesture("carat", carat3);
+		this.addGesture("circle", circle3);
+		this.addGesture("arch", arch3);	
 	}
 
 	train(){
@@ -539,7 +539,7 @@ let gestureRecognizer = class{
 
 		this._weight0sofAllVectors = getWeight0s(this._gestureClasses);
 		this._featureWeightsForClasses = getFeatureWeightsForClasses(this._gestureClasses);
-		console.log(this._numClasses);
+		console.log('numClasses: ', this._numClasses);
 	}
 	
 	addGesture(className, gestureClass){
@@ -570,7 +570,7 @@ let gestureRecognizer = class{
 		}
 		let max = Math.max.apply(Math, weightEval);
 		let maxIndex = weightEval.indexOf(max);
-		console.log(weightEval)
+		// console.log(weightEval)
 		// console.log(max, maxIndex)
 		let classificationProb = this.getClassificationProb(weightEval);
 		console.log("PROB ::: ", classificationProb);
@@ -587,7 +587,7 @@ let gestureRecognizer = class{
 			// console.log(max, max - weights[i])
 			// console.log(Math.exp(max - weights[i]));
 			sum += Math.exp(weights[i] - max);
-			console.log(weights[i] - max);
+			// console.log(weights[i] - max);
 		}
 		return (1/sum);
 	}
@@ -602,7 +602,7 @@ let gestureRecognizer = class{
 				sum += this._invComCovMatrix[j][k] * (featureVector[j] - averageFeatures[j]) * (featureVector[k] - averageFeatures[k]);
 			}
 		}
-		console.log ("M Dist :  ", sum, "1/2 F2 : ", (1/2)*NUM_FEATURES*NUM_FEATURES);
+		// console.log ("M Dist :  ", sum, "1/2 F2 : ", (1/2)*NUM_FEATURES*NUM_FEATURES);
 		return sum;
 	}
 };
@@ -637,24 +637,24 @@ let badArch = new Array(new Point(0,0),new Point(0,-3),new Point(2,-9),new Point
 
 let u = new Array(new Point(0,0),new Point(-1,-12),new Point(-1,-16),new Point(-1,-20),new Point(-1,-23),new Point(-1,-26),new Point(-1,-30),new Point(-1,-34),new Point(-1,-39),new Point(-1,-44),new Point(-1,-50),new Point(-2,-54),new Point(-2,-60),new Point(-3,-68),new Point(-4,-76),new Point(-4,-84),new Point(-5,-93),new Point(-5,-103),new Point(-7,-114),new Point(-8,-125),new Point(-10,-136),new Point(-12,-147),new Point(-13,-156),new Point(-14,-165),new Point(-15,-176),new Point(-16,-184),new Point(-16,-196),new Point(-17,-206),new Point(-17,-217),new Point(-17,-225),new Point(-17,-235),new Point(-15,-244),new Point(-13,-252),new Point(-9,-260),new Point(-5,-269),new Point(0,-277),new Point(5,-287),new Point(11,-296),new Point(16,-305),new Point(22,-313),new Point(29,-322),new Point(34,-330),new Point(40,-338),new Point(46,-345),new Point(52,-352),new Point(59,-358),new Point(66,-362),new Point(71,-365),new Point(76,-369),new Point(83,-373),new Point(88,-376),new Point(95,-378),new Point(101,-379),new Point(107,-380),new Point(113,-380),new Point(120,-380),new Point(127,-380),new Point(133,-380),new Point(141,-378),new Point(148,-376),new Point(154,-372),new Point(159,-370),new Point(165,-364),new Point(170,-360),new Point(175,-354),new Point(180,-349),new Point(183,-344),new Point(187,-338),new Point(191,-331),new Point(195,-324),new Point(199,-316),new Point(202,-307),new Point(206,-298),new Point(209,-289),new Point(212,-278),new Point(215,-269),new Point(220,-255),new Point(225,-244),new Point(231,-232),new Point(238,-217),new Point(243,-206),new Point(249,-192),new Point(256,-179),new Point(261,-165),new Point(266,-150),new Point(270,-139),new Point(275,-126),new Point(279,-113),new Point(283,-101),new Point(285,-89),new Point(286,-77),new Point(288,-64),new Point(290,-52),new Point(292,-40),new Point(293,-31),new Point(294,-19),new Point(294,-10),new Point(294,-4),new Point(294,4),new Point(294,12),new Point(294,16),new Point(294,22),new Point(293,26),new Point(291,30),new Point(288,32),new Point(286,35),new Point(284,37),new Point(282,38),new Point(281,39),new Point(280,39),new Point(279,40),new Point(278,40),new Point(277,40),new Point(276,40));
 
-console.log(myGestureClass.classifyGesture(points));
+// console.log(myGestureClass.classifyGesture(points));
 
-console.log(myGestureClass.classifyGesture(lineTest1));
-console.log(myGestureClass.classifyGesture(lineTest2));
+// console.log(myGestureClass.classifyGesture(lineTest1));
+// console.log(myGestureClass.classifyGesture(lineTest2));
 
-console.log(myGestureClass.classifyGesture(caratTest1));
-console.log(myGestureClass.classifyGesture(caratTest2));
+// console.log(myGestureClass.classifyGesture(caratTest1));
+// console.log(myGestureClass.classifyGesture(caratTest2));
 
-console.log(myGestureClass.classifyGesture(circleTest1));
-console.log(myGestureClass.classifyGesture(circleTest2));
+// console.log(myGestureClass.classifyGesture(circleTest1));
+// console.log(myGestureClass.classifyGesture(circleTest2));
 
-console.log(myGestureClass.classifyGesture(archTest1)); // gets classified as carat
-console.log(myGestureClass.classifyGesture(archTest2));
+// console.log(myGestureClass.classifyGesture(archTest1)); // gets classified as carat
+// console.log(myGestureClass.classifyGesture(archTest2));
 
-console.log(myGestureClass.classifyGesture(circleTest3));
-console.log(myGestureClass.classifyGesture(badArch));
+// console.log(myGestureClass.classifyGesture(circleTest3));
+// console.log(myGestureClass.classifyGesture(badArch));
 
-console.log(myGestureClass.classifyGesture(u));
+// console.log(myGestureClass.classifyGesture(u));
 
 
 
