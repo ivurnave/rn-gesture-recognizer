@@ -8,6 +8,12 @@ let RNFS = require('react-native-fs'); // for writing json files
 export default class Trainer extends React.Component {
 	constructor(props, context) {
 		super(props, context);
+
+		// Initial exportable object, to be stored in state
+		let writeObj = {
+			gestureClasses: []
+		}
+
 		this.state = {
 			currentPoints: [],
 			previousStrokes: this.props.strokes || [],
@@ -15,6 +21,7 @@ export default class Trainer extends React.Component {
 			gestureClassPoints: [],
 			pen: new Pen(),
 			currGestureClassName: "gestureClassName",
+			gestureClassOutputFile: writeObj,
 		};
 
 		this._panResponder = PanResponder.create({
@@ -84,15 +91,38 @@ export default class Trainer extends React.Component {
 		this.state.pen.clear();
 	};
 
+	// Add the current gesture class to the output object, then reset everything else
+	saveAndAddNewGestureClass = () => {
+		let writeObj = this.state.gestureClassOutputFile;
+		let currGestureClass = {
+			'gestureClassName': this.state.currGestureClassName,
+			'trainingGestures': this.state.gestureClassPoints,
+		}
+		writeObj.gestureClasses.push(currGestureClass);
+
+		this.setState({
+			currentPoints: [],
+			previousStrokes: [],
+			newStroke: [],
+			gestureClassPoints: [],
+			pen: new Pen(),
+			currGestureClassName: "gestureClassName",
+			gestureClassOutputFile: writeObj
+		})
+	}
+
 	// Write the current gesture class to the gestureClasses.json file
 	exportGestureClass = () => {
-		// console.log(this.state.gestureClassPoints);
+		// if they haven't saved the current gesture, add it to the object
 		if (this.state.gestureClassPoints.length != 0 && this.state.currGestureClassName.length != 0) {
+			this.saveAndAddNewGestureClass();
+		}
+
+		let writeObj = this.state.gestureClassOutputFile;
+		console.log(writeObj);
+
+		if (writeObj.gestureClasses.length > 0) {
 			const path = this.props.path + '/gestureClasses.json';
-			var writeObj = {
-				'gestureClassName': this.state.currGestureClassName,
-				'trainingGestures': this.state.gestureClassPoints,
-			}
 			RNFS.writeFile(path, JSON.stringify(writeObj), 'utf8')
 				.then(success => {
 					console.log('gestureClasses written!');
@@ -101,8 +131,14 @@ export default class Trainer extends React.Component {
 					console.log(err.message);
 				});
 	
+			// on export, reset everything but the writeObject!
 			this.setState({
+				currentPoints: [],
+				previousStrokes: this.props.strokes || [],
+				newStroke: [],
 				gestureClassPoints: [],
+				pen: new Pen(),
+				currGestureClassName: "gestureClassName",
 			});
 		}
 	};
@@ -189,7 +225,10 @@ export default class Trainer extends React.Component {
 	};
 
 	render() {
-		console.log(this.state.gestureClassPoints);
+		// console.log(this.state.gestureClassPoints);
+		if (this.state.gestureClassOutputFile != null) {
+
+		}
 		return (
 			<View style={{flex: 1, alignItems: 'stretch'}}>
 				{/* The Original RN-Draw Component */}
@@ -221,8 +260,9 @@ export default class Trainer extends React.Component {
 					value={this.state.currGestureClassName}/>
 				<View style={styles.button}>
 					<Button onPress={this.clear} title="Clear" />
-					<Button onPress={this.exportGestureClass} title="Export" />
 					<Button onPress={this.rewind} title="Undo" />
+					<Button onPress={this.saveAndAddNewGestureClass} title="New" />
+					<Button onPress={this.exportGestureClass} title="Export" />
 				</View>
 			</View>
 		);
@@ -247,6 +287,7 @@ let styles = StyleSheet.create({
 		backgroundColor: '#c1c1ba'
 	},
 	nameClass: {
-		justifyContent: 'center',
+		height: 30,
+		textAlign: 'center',
 	}
 });
