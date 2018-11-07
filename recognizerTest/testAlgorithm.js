@@ -126,6 +126,38 @@ function spitPoints(points){
 	console.log(retStr)
 }
 
+//
+// frechet's distance
+
+function frechetHelper(ca, i, j, P, Q){
+	if (ca[i][j] > -1){		
+		return ca[i][j];
+	}
+	else if (i==0 && j==0){		
+		ca[i][j] = Distance(P[0],Q[0]);
+	}
+	else if (i>0 && j==0){	
+		ca[i][j] = Math.max(frechetHelper(ca,i-1,0,P,Q),Distance(P[i],Q[0]));
+	}
+	else if (i==0 && j>0){
+		ca[i][j] = Math.max(frechetHelper(ca,0,j-1,P,Q),Distance(P[0],Q[j]));
+	}
+	else if (i>0 && j>0){	
+		ca[i][j] = Math.max(Math.min(frechetHelper(ca,i-1,j,P,Q),frechetHelper(ca,i-1,j-1,P,Q),frechetHelper(ca,i,j-1,P,Q)),Distance(P[i],Q[j]));
+	}
+	else{		
+		ca[i][j] = Infinity;
+	}
+	return ca[i][j]
+}
+
+function frechetDistance(points1, points2){
+	l1 = points1.length;
+	l2 = points2.length;
+	ca = [...Array(l1)].map(e => Array.apply(null, Array(l2)).map(Number.prototype.valueOf,-1));
+	return frechetHelper(ca, l1-1, l2-1, points1, points2);
+}
+
 function Point2(x, y, timestamp) // constructor
 {
 	this.X = x;
@@ -244,14 +276,12 @@ function TranslateTo(points, pt) // translates points' centroid
 }
 
 function normalize(points){
-	console.log("NORMALIZING")
-
-	points = Resample(points, 200)		
+	newpoints = Resample(points, 200);		
+	newpoints = TranslateTo(newpoints, Origin);
+	newpoints = resize(newpoints, SquareSize);
 	// let radians = IndicativeAngle(points);
 	// points = RotateBy(points, -radians);
-	points = TranslateTo(points, Origin);
-	points = resize(points, SquareSize);
-	return points
+	return newpoints
 }
 
 
@@ -292,8 +322,6 @@ gestureClasses <- Array of gestureClass
 // Constants
 const NUM_FEATURES = 11;
 const math = require('mathjs');
-// var gestures = require('./exampleGestures.js');
-// `console.log(`gestures.line2);
 
 // helper function for f9
 function getAngle(p1, p2, p3) 
@@ -613,34 +641,12 @@ function getWeight0s(gestureClasses){
 	return weight0s; //weight0s is an array of w0 for each class, length = no. of gestures
 }
 
-// function classifyGesture(points){
-// 	let numClasses = 5; //placeholder
-// 	let  weight0sofAllVectors = [1,2,3,4,5]; //placeholder
-// 	let featureWeightsForClasses = [  //placeholder
-// 		[1,2,3,4,5,6,7,8,9,10,11],
-// 		[1,2,3,4,5,6,7,8,9,10,11],
-// 		[1,2,3,4,5,6,7,8,9,10,11],
-// 		[1,2,3,4,5,6,7,8,9,10,11],
-// 		[1,2,3,4,5,6,7,8,9,10,11],
-// 	]
-// 	let eval = new Array(numClasses);
-// 	let sum = 0;
-// 	let featureVector = getFeaturesForGesture(points);
-// 	for (let i=0; i<numClasses; i++){
-// 		for (let j=0; j<NUM_FEATURES; j++){
-// 			sum += featureWeightsForClasses[i][j] * featureVector[j];
-// 		}
-// 		eval[i] = weight0sofAllVectors[i] + sum;
-// 		sum = 0;
-// 	}
-// }
-
-
 let gestureRecognizer = class{
 	constructor(){
 		this._numClasses = 0;
 		this._classNames = new Array();
-		this._gestureClasses = new Array()
+		this._gestureClasses = new Array();
+		this._meanTrainGesture = new Array();
 
 		this._invComCovMatrix = new Array();
 		this._avgFeatures = new Array();
@@ -649,40 +655,35 @@ let gestureRecognizer = class{
 		
 		this._weight0sofAllVectors = new Array();
 		this._featureWeightsForClasses = new Array();
-
+// 
 		this.addGesture("line", line2);
 		this.addGesture("carat", carat2);
 		this.addGesture("circle", circle2);
 		this.addGesture("arch", arch2);		
-		this.addGesture("line", line3);
-		this.addGesture("carat", carat3);
-		this.addGesture("circle", circle3);
-		this.addGesture("arch", arch3);
+		this.addGesture("line2", line3);
+		this.addGesture("carat2", carat3);
+		this.addGesture("circle2", circle3);
+		this.addGesture("arch2", arch3);
 	}
 
 	train(){
 		for (let i=0; i<this._numClasses; i++){
 			this._avgFeatures.push(getAvgFeatureVectorForClass(this._gestureClasses[i]))
 		}
-		// console.log("COV ::: ", getCommonCovarianceMatrix(this._gestureClasses));
 
 		this._invComCovMatrix = math.inv(getCommonCovarianceMatrix(this._gestureClasses));
-		// console.log("COMMON COV ::: ", this._invComCovMatrix)
-
 		this._weight0sofAllVectors = getWeight0s(this._gestureClasses);
 		this._featureWeightsForClasses = getFeatureWeightsForClasses(this._gestureClasses);
 	}
 	
 	addGesture(className, gestureClass){
+		let trainingGesures = new Array();
 		gestureClass.forEach(points => {
-			points = normalize(points);
-			console.log (className);
-			console.log (className);
-			console.log (className);
-			spitPoints(points)
+			trainingGesures.push(normalize(points))
 		});	
+
 		this._classNames.push(className);
-		this._gestureClasses.push(gestureClass);
+		this._gestureClasses.push(trainingGesures);
 		this._numClasses += 1;
 		this.train();
 	}
@@ -696,7 +697,6 @@ let gestureRecognizer = class{
 
 	classifyGesture(points){
 		points =  normalize(points)
-		spitPoints(points);
 		let weightEval = new Array(this._numClasses);
 		let sum = 0;
 		let featureVector = getFeaturesForGesture(points);
@@ -710,10 +710,14 @@ let gestureRecognizer = class{
 		let max = Math.max.apply(Math, weightEval);
 		let maxIndex = weightEval.indexOf(max);
 		console.log(weightEval)
-		// console.log(max, maxIndex)
 		let classificationProb = this.getClassificationProb(weightEval);
 		console.log("P ::: ", classificationProb);
 		this.getMahalanobisDistance(maxIndex, featureVector);
+		console.log("FD::: ", frechetDistance(points, this._gestureClasses[maxIndex][0]));
+		console.log("Line ::: ", frechetDistance(points, normalize(line2[0])))
+		console.log("Circle ::: ", frechetDistance(points, normalize(circle2[0])))
+		console.log("Carat ::: ", frechetDistance(points, normalize(carat2[0])))
+		console.log("Arch ::: ", frechetDistance(points, normalize(arch2[0])))
 		return this._classNames[maxIndex]
 
 	}
@@ -731,8 +735,6 @@ let gestureRecognizer = class{
 	getMahalanobisDistance(classIndex, featureVector){
 		let averageFeatures = this._avgFeatures[classIndex];
 		let sum = 0
-		// console.log(featureVector)
-		// console.log(averageFeatures)
 		for (let j=0; j<NUM_FEATURES; j++){
 			for (let k=0; k<NUM_FEATURES; k++){
 				sum += this._invComCovMatrix[j][k] * (featureVector[j] - averageFeatures[j]) * (featureVector[k] - averageFeatures[k]);
@@ -769,7 +771,8 @@ let badArch = new Array(new Point2(0,0),new Point2(0,-3),new Point2(2,-9),new Po
 
 // console.log(myGestureClass.classifyGesture(points));
 
-// console.log(myGestureClass.classifyGesture(lineTest1));
+console.log(myGestureClass.classifyGesture(lineTest2));
+
 // console.log(myGestureClass.classifyGesture(lineTest2));
 
 // console.log(myGestureClass.classifyGesture(caratTest1));
@@ -785,3 +788,6 @@ let badArch = new Array(new Point2(0,0),new Point2(0,-3),new Point2(2,-9),new Po
 // console.log(myGestureClass.classifyGesture(badArch));
 
 // console.log(myGestureClass.classifyGesture(arch2[1]));
+
+// p1 = new Array(new Point2(1,3), new Point2(3,5), new Point2(2,4));
+// p2 = new Array(new Point2(7,8), new Point2(1,4), new Point2(2,3));
