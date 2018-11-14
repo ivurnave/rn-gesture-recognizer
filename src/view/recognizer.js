@@ -4,11 +4,11 @@ import Pen from '../tools/pen';
 import Point from '../tools/point';
 import Svg, {G, Path} from 'react-native-svg';
 
-const gestureRecognizer = require('../tools/rubine.js');
+import gestureRecognizer from '../tools/rubine';
 
 export default class Recognizer extends React.Component {
-	constructor(props, context) {
-		super(props, context);
+	constructor(props) {
+		super(props);
 		this.state = {
 			currentPoints: [],
 			previousStrokes: this.props.strokes || [],
@@ -18,7 +18,6 @@ export default class Recognizer extends React.Component {
 			gestureClassPoints: [],
 		};
 
-		this.myGestureRecognizer = new gestureRecognizer();
 
 		this._panResponder = PanResponder.create({
 			onStartShouldSetPanResponder: (evt, gs) => true,
@@ -33,6 +32,11 @@ export default class Recognizer extends React.Component {
 			rewind: rewind(this.rewind),
 			clear: clear(this.clear),
 		};
+	}
+
+	componentDidMount() {
+		console.log(this.props.trainingData.gestureClasses);
+		this.myGestureRecognizer = new gestureRecognizer(this.props.trainingData.gestureClasses);
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -148,7 +152,8 @@ export default class Recognizer extends React.Component {
 		if (this.state.currentPoints.length > 3) {;
 			// currentGesture = myGestureRecognizer.classifyGesture(this.state.currentPoints);
 			currentGesture = this.myGestureRecognizer.classifyGesture(this.state.currentPoints);
-			console.log(currentGesture);
+			// console.log(currentGesture);
+			this.props.recognitionHandler(currentGesture);
 			if (currentGesture === 'circle' ) {
 				// newShape = this.renderCircle();
 			}
@@ -197,6 +202,7 @@ export default class Recognizer extends React.Component {
 	};
 
 	render() {
+
 		return (
 			<View style={{flex: 1, alignItems: 'stretch'}}>
 				{/* The Original RN-Draw Component */}
