@@ -1,21 +1,23 @@
 import React from 'react';
-import {View, PanResponder, StyleSheet, Button} from 'react-native';
+import {View, PanResponder, StyleSheet} from 'react-native';
 import Pen from '../tools/pen';
 import Point from '../tools/point';
-import humps from 'humps';
 import Svg, {G, Path} from 'react-native-svg';
-let RNFS = require('react-native-fs'); // for writing json files
+
+import gestureRecognizer from '../tools/rubine';
 
 export default class Recognizer extends React.Component {
-	constructor(props, context) {
-		super(props, context);
+	constructor(props) {
+		super(props);
 		this.state = {
 			currentPoints: [],
 			previousStrokes: this.props.strokes || [],
 			newStroke: [],
-			gestureClassPoints: [],
 			pen: new Pen(),
+			gesture: '',
+			gestureClassPoints: [],
 		};
+
 
 		this._panResponder = PanResponder.create({
 			onStartShouldSetPanResponder: (evt, gs) => true,
@@ -24,6 +26,17 @@ export default class Recognizer extends React.Component {
 			onPanResponderMove: (evt, gs) => this.onResponderMove(evt, gs),
 			onPanResponderRelease: (evt, gs) => this.onResponderRelease(evt, gs),
 		});
+		const rewind = props.rewind || function() {};
+		const clear = props.clear || function() {};
+		this._clientEvents = {
+			rewind: rewind(this.rewind),
+			clear: clear(this.clear),
+		};
+	}
+
+	componentDidMount() {
+		console.log(this.props.trainingData.gestureClasses);
+		this.myGestureRecognizer = new gestureRecognizer(this.props.trainingData.gestureClasses);
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -84,25 +97,6 @@ export default class Recognizer extends React.Component {
 		this.state.pen.clear();
 	};
 
-	// Write the current gesture class to the gestureClasses.json file
-	exportGestureClass = () => {
-		// console.log(this.state.gestureClassPoints);
-		if (this.state.gestureClassPoints.length != 0) {
-			const path = this.props.path + '/gestureClasses.json';
-			RNFS.writeFile(path, JSON.stringify(this.state.gestureClassPoints), 'utf8')
-				.then(success => {
-					console.log('gestureClasses written!');
-				})
-				.catch(err => {
-					console.log(err.message);
-				});
-	
-			this.setState({
-				gestureClassPoints: [],
-			});
-		}
-	};
-
 	// Called on all touch events from the PanResponder
 	onTouch(evt) {
 		let x, y, timestamp;
@@ -153,12 +147,19 @@ export default class Recognizer extends React.Component {
 			},
 		};
 
+		let currentGesture;
+		if (this.state.currentPoints.length > 3) {;
+			currentGesture = this.myGestureRecognizer.classifyGesture(this.state.currentPoints);
+			this.props.recognitionHandler(currentGesture);
+		}
+
 		this.state.pen.addStroke(points);
 		this.setState(
 			{
 				previousStrokes: [...this.state.previousStrokes, newElement],
 				gestureClassPoints: [...this.state.gestureClassPoints, points],
 				currentPoints: [],
+				gesture: currentGesture,
 			},
 			() => {
 				this._onChangeStrokes(this.state.previousStrokes);
@@ -185,36 +186,10 @@ export default class Recognizer extends React.Component {
 		return null;
 	};
 
-	convertStrokesToSvg = (strokes, layout = {}) => {
-		return `
-			<svg xmlns="http://www.w3.org/2000/svg" width="${layout.width}" height="${
-					layout.height
-				}" version="1.1">
-				<g>
-					${strokes.map(e => {
-						return `<${e.type.toLowerCase()} ${Object.keys(e.attributes)
-							.map(a => {
-								return `${humps.decamelize(a, {separator: '-'})}="${
-									e.attributes[a]
-								}"`;
-							})
-							.join(' ')}/>`;
-					})
-						.join('\n')}
-				</g>
-			</svg>
-		`;
-	};
-
-	exportToSVG = () => {
-		const strokes = [...this.state.previousStrokes];
-		return convertStrokesToSvg(strokes, this._layout);
-	};
-
 	render() {
-		console.log(this.state.gestureClassPoints);
+
 		return (
-			<View>
+			<View style={{flex: 1, alignItems: 'stretch'}}>
 				{/* The Original RN-Draw Component */}
 				<View onLayout={this._onLayoutContainer} style={[styles.drawContainer, this.props.containerStyle]}>
 					<View style={styles.svgContainer} {...this._panResponder.panHandlers}>
@@ -237,12 +212,6 @@ export default class Recognizer extends React.Component {
 						{this.props.children}
 					</View>
 				</View>
-
-				<View>
-					<Button onPress={this.clear} title="Clear" />
-					<Button onPress={this.exportGestureClass} title="Export" />
-					<Button onPress={this.rewind} title="Undo" />
-				</View>
 			</View>
 		);
 	}
@@ -251,16 +220,13 @@ export default class Recognizer extends React.Component {
 let styles = StyleSheet.create({
 	drawContainer: {
 		flex: 1,
-		display: 'flex',
+        display: 'flex',
+        backgroundColor: '#e0e4e5',
 	},
 	svgContainer: {
 		flex: 1,
 	},
 	drawSurface: {
 		flex: 1,
-	},
-	button: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
 	},
 });
