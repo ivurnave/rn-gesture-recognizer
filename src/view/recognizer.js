@@ -148,24 +148,9 @@ export default class Recognizer extends React.Component {
 		};
 
 		let currentGesture;
-		let newShape;
 		if (this.state.currentPoints.length > 3) {;
-			// currentGesture = myGestureRecognizer.classifyGesture(this.state.currentPoints);
 			currentGesture = this.myGestureRecognizer.classifyGesture(this.state.currentPoints);
-			// console.log(currentGesture);
 			this.props.recognitionHandler(currentGesture);
-			if (currentGesture === 'circle' ) {
-				// newShape = this.renderCircle();
-			}
-			else if (currentGesture === 'line') {
-				// newShape = this.renderLine();
-			}
-			else if (currentGesture === 'carat') {
-				// newShape = this.renderCaret();
-			}
-			else if (currentGesture === 'arch') {
-				// newShape = this.renderArch();
-			}
 		}
 
 		this.state.pen.addStroke(points);
