@@ -19,9 +19,6 @@ function Point(x, y) // constructor
 	this.Y = y;
 }
 
-const gestureRecognizer = require('./testAlgorithm.js');
-let myGestureRecognizer = new gestureRecognizer();
-
 export default class App extends React.Component {
 	constructor(props) {
 		super(props)
@@ -87,7 +84,6 @@ export default class App extends React.Component {
 
 			onPanResponderRelease: (e, {vx, vy}) => {
 				if (this.state.coordinates.length > 3) {
-					console.log(JSON.stringify(this.state.coordinates2));
 					this.state.gesture = myGestureRecognizer.classifyGesture(this.state.coordinates);
 					console.log(this.state.gesture);
 				}
