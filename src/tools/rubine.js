@@ -168,7 +168,7 @@ function TranslateTo(points, pt) // translates points' centroid
 	for (var i = 0; i < points.length; i++) {
 		var qx = points[i].X + pt.X - c.X;
 		var qy = points[i].Y + pt.Y - c.Y;
-		newpoints[newpoints.length] = new Point2(qx, qy);
+		newpoints[newpoints.length] = new Point(qx, qy);
 	}
 	return newpoints;
 }
