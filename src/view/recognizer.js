@@ -18,7 +18,6 @@ export default class Recognizer extends React.Component {
 			gestureClassPoints: [],
 		};
 
-
 		this._panResponder = PanResponder.create({
 			onStartShouldSetPanResponder: (evt, gs) => true,
 			onMoveShouldSetPanResponder: (evt, gs) => true,
@@ -35,8 +34,8 @@ export default class Recognizer extends React.Component {
 	}
 
 	componentDidMount() {
-		console.log(this.props.trainingData.gestureClasses);
-		this.myGestureRecognizer = new gestureRecognizer(this.props.trainingData.gestureClasses);
+		var data = JSON.parse(this.props.trainingData);
+		this.myGestureRecognizer = new gestureRecognizer(data);
 	}
 
 	componentWillReceiveProps(newProps) {
@@ -138,8 +137,7 @@ export default class Recognizer extends React.Component {
 			type: 'Path',
 			attributes: {
 				d: this.state.pen.pointsToSvg(points),
-				// stroke: this.props.color || '#000000',
-				stroke: '#9b6ed69e', // added stroke will be a different color and partially transparent
+				stroke: this.props.color || '#9b6ed69e', // added stroke will be a different color and partially transparent
 				strokeWidth: this.props.strokeWidth || 4,
 				fill: 'none',
 				strokeLinecap: 'round',
@@ -148,7 +146,7 @@ export default class Recognizer extends React.Component {
 		};
 
 		let currentGesture;
-		if (this.state.currentPoints.length > 3) {;
+		if (this.state.currentPoints.length > 3) {
 			currentGesture = this.myGestureRecognizer.classifyGesture(this.state.currentPoints);
 			this.props.recognitionHandler(currentGesture);
 		}
@@ -165,6 +163,7 @@ export default class Recognizer extends React.Component {
 				this._onChangeStrokes(this.state.previousStrokes);
 			},
 		);
+		this.clear();
 	}
 
 	_onChangeStrokes = strokes => {
@@ -187,11 +186,13 @@ export default class Recognizer extends React.Component {
 	};
 
 	render() {
-
 		return (
 			<View style={{flex: 1, alignItems: 'stretch'}}>
 				{/* The Original RN-Draw Component */}
-				<View onLayout={this._onLayoutContainer} style={[styles.drawContainer, this.props.containerStyle]}>
+				<View
+					onLayout={this._onLayoutContainer}
+					style={[styles.drawContainer, this.props.containerStyle]}
+				>
 					<View style={styles.svgContainer} {...this._panResponder.panHandlers}>
 						<Svg style={styles.drawSurface}>
 							<G>
@@ -220,8 +221,8 @@ export default class Recognizer extends React.Component {
 let styles = StyleSheet.create({
 	drawContainer: {
 		flex: 1,
-        display: 'flex',
-        backgroundColor: '#e0e4e5',
+		display: 'flex',
+		backgroundColor: '#e0e4e5',
 	},
 	svgContainer: {
 		flex: 1,
