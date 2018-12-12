@@ -1,24 +1,8 @@
-import Point from './point';
+import {Point, FrechetHelpderData} from './types';
 
 // Constants
 const NUM_FEATURES = 11;
 const math = require('mathjs');
-
-/* 
-
-Training data array: 
-
-gesture <- Array of Point
-gestureClass <- Array of gesture for a single gesture class
-gestureClasses <- Array of gestureClass 
-
-*/
-
-function FrechetHelpderData(meanPoints, deviation, symmetrical){
-	this.meanPoints = meanPoints;
-	this.deviation = deviation;
-	this.symmetrical = symmetrical;
-}
 
 function PathLength(points)
 {
@@ -488,22 +472,37 @@ function getFrechetDeviation(trainingGestures){
 }
 
 let gestureRecognizer = class{
-	constructor(trainingData){
-		this._numClasses = 0;
-		this._classNames = new Array();
-		this._gestureClasses = new Array()
-		this._frechetDistanceHelperValues = new Array();
-
-		this._invComCovMatrix = new Array();
-		this._avgFeatures = new Array();
-		this._weight0sofAllVectors = new Array();
-		this._featureWeightsForClasses = new Array();	
-
-		// Where training data is added in order to train
-		if (trainingData) {
-			this.addGestures(trainingData);
+	constructor(data){
+		if (data) {
+			if (data.classNames) {
+				// rebuild model
+				this._classNames = data.classNames;
+				this._frechetDistanceHelperValues = data.frechetDistanceHelperValues;
+				this._invComCovMatrix = data.invComCovMatrix;
+				this._avgFeatures = data.avgFeatures;
+				this._weight0sofAllVectors = data.weight0sofAllVectors;
+				this._featureWeightsForClasses = data.featureWeightsForClasses;
+				this._numClasses = this._classNames.length;
+			} else {
+				// build model
+				this._numClasses = 0;
+				this._classNames = new Array();
+				this._gestureClasses = new Array()
+				this._frechetDistanceHelperValues = new Array();
+				this._invComCovMatrix = new Array();
+				this._avgFeatures = new Array();
+				this._weight0sofAllVectors = new Array();
+				this._featureWeightsForClasses = new Array();	
+				this._featureWeightsForClasses = new Array();	
+				this._featureWeightsForClasses = new Array();	
+				this._featureWeightsForClasses = new Array();	
+				this._featureWeightsForClasses = new Array();	
+				this._featureWeightsForClasses = new Array();	
+				this._featureWeightsForClasses = new Array();	
+				this.addGestures(data);
+			}
 		}
-}
+	}
 
 	train(){
 		for (let i=0; i<this._numClasses; i++){
@@ -513,7 +512,6 @@ let gestureRecognizer = class{
 		this._invComCovMatrix = math.inv(getCommonCovarianceMatrix(this._gestureClasses));
 		this._weight0sofAllVectors = getWeight0s(this._gestureClasses);
 		this._featureWeightsForClasses = getFeatureWeightsForClasses(this._gestureClasses);
-		console.log('numClasses: ', this._numClasses);
 	}
 
 	addGestures(trainingData) {
@@ -528,7 +526,6 @@ let gestureRecognizer = class{
 		let trainingGestures = new Array();
 		gestureClass.forEach(points => {
 			trainingGestures.push(normalize(points))
-			spitPoints(normalize(points))
 		});	
 
 		this._classNames.push(className);
