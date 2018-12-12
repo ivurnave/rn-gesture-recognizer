@@ -2,6 +2,7 @@ import {Point, FrechetHelpderData} from './types';
 
 // Constants
 const NUM_FEATURES = 11;
+const FRECHET_DEVIATION_FACTOR = 0.8;
 const math = require('mathjs');
 
 function PathLength(points) {
@@ -500,7 +501,7 @@ function getFrechetDeviation(trainingGestures) {
 			max = frechetD;
 		}
 	});
-	return max + 0.8 * max;
+	return max + FRECHET_DEVIATION_FACTOR * max;
 }
 
 let gestureRecognizer = class {
