@@ -4,7 +4,8 @@
   "description": "A library for gesture recognition in React Native. Built off of the rn-draw package.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no tests currently\" && exit 1"
+    "test": "echo \"Error: no tests currently\" && exit 1",
+    "prettier": "prettier --write 'src/**/*.js' '*.js'"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,14 @@
   ],
   "author": "Evan Holmes, Bidit Sharma, Bridget Koehler",
   "license": "MIT",
+  "prettier": {
+    "useTabs": true,
+    "singleQuote": true,
+    "trailingComma": "all",
+    "bracketSpacing": false,
+    "semi": true
+  },
+
   "peerDependencies": {
     "react": "*",
     "react-native": "*",
@@ -30,5 +39,8 @@
   },
   "dependencies": {
     "mathjs": "5.2.3"
+  },
+  "devDependencies": {
+    "prettier": "^1.15.3"
   }
 }

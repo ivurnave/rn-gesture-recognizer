@@ -3,5 +3,5 @@ import Trainer from './src/view/trainer';
 
 module.exports = {
 	Recognizer,
-    Trainer
+	Trainer,
 };
