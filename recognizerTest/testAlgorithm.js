@@ -178,6 +178,7 @@ function frechetDistance(points1, frechetDistanceHelperValues){
 
 function getFrechetDeviation(trainingGestures){
 	let meanPoints = meanGesture(trainingGestures);
+	spitPoints(meanPoints)
 	l1 = meanPoints.length;
 
 	max = 0;
@@ -691,12 +692,12 @@ function meanGesture(trainingPoints){
 		sumX = 0;
 		sumY = 0;
 		for (let j=0; j<trainingSetLength; j++){
-			// sumX += trainingPoints[j][i].X
-			// sumY += trainingPoints[j][i].Y
+			sumX += trainingPoints[j][i].X
+			sumY += trainingPoints[j][i].Y
 		}
 		retPoint.push(new Point2(sumX/trainingSetLength, sumY/trainingSetLength));
 	}
-	return trainingPoints[0];
+	// return trainingPoints[0];
 	return retPoint;
 }
 
@@ -816,15 +817,15 @@ module.exports = gestureRecognizer;
 
 
 
-// let myGestureClass = new gestureRecognizer();
-// myGestureClass.addGesture("line", line2);
-// myGestureClass.addGesture("carat", carat2);
-// myGestureClass.addGesture("circle", circle2, 1);
-// myGestureClass.addGesture("arch", arch2);		
-// myGestureClass.addGesture("line", line3);
-// myGestureClass.addGesture("carat", carat3);
-// myGestureClass.addGesture("circle", circle3,1);
-// myGestureClass.addGesture("arch", arch3);
+let myGestureClass = new gestureRecognizer();
+myGestureClass.addGesture("line", line2);
+myGestureClass.addGesture("carat", carat2);
+myGestureClass.addGesture("circle", circle2, 1);
+myGestureClass.addGesture("arch", arch2);		
+myGestureClass.addGesture("line", line3);
+myGestureClass.addGesture("carat", carat3);
+myGestureClass.addGesture("circle", circle3,1);
+myGestureClass.addGesture("arch", arch3);
 
 
 
@@ -846,7 +847,7 @@ module.exports = gestureRecognizer;
 // let circleTest1 = new Array(new Point2(0,0),new Point2(-21,-5),new Point2(-75,-20),new Point2(-107,-34),new Point2(-133,-47),new Point2(-155,-62),new Point2(-175,-76),new Point2(-197,-102),new Point2(-217,-130),new Point2(-223,-148),new Point2(-222,-160),new Point2(-215,-175),new Point2(-198,-196),new Point2(-166,-220),new Point2(-114,-243),new Point2(-62,-255),new Point2(-38,-256),new Point2(-28,-250),new Point2(-17,-238),new Point2(-7,-223),new Point2(1,-204),new Point2(14,-181),new Point2(23,-150),new Point2(28,-119),new Point2(25,-88),new Point2(20,-70),new Point2(11,-55),new Point2(-4,-38),new Point2(-20,-25),new Point2(-36,-18),new Point2(-49,-14));
 // let circleTest2 = new Array(new Point2(0,0),new Point2(-5,0),new Point2(-12,1),new Point2(-18,3),new Point2(-24,5),new Point2(-40,9),new Point2(-52,10),new Point2(-88,3),new Point2(-98,-4),new Point2(-107,-14),new Point2(-117,-29),new Point2(-127,-51),new Point2(-139,-73),new Point2(-149,-91),new Point2(-156,-106),new Point2(-163,-119),new Point2(-166,-132),new Point2(-166,-146),new Point2(-164,-159),new Point2(-160,-174),new Point2(-156,-184),new Point2(-149,-196),new Point2(-138,-208),new Point2(-121,-222),new Point2(-103,-235),new Point2(-88,-243),new Point2(-76,-250),new Point2(-62,-254),new Point2(-46,-257),new Point2(-28,-259),new Point2(-11,-259),new Point2(4,-257),new Point2(15,-254),new Point2(27,-248),new Point2(36,-240),new Point2(46,-231),new Point2(54,-222),new Point2(62,-209),new Point2(67,-199),new Point2(71,-190),new Point2(74,-181),new Point2(76,-170),new Point2(79,-159),new Point2(79,-145),new Point2(79,-131),new Point2(77,-116),new Point2(74,-101),new Point2(68,-86),new Point2(61,-71),new Point2(55,-59),new Point2(51,-47),new Point2(46,-38),new Point2(39,-30),new Point2(33,-24),new Point2(26,-19),new Point2(19,-15),new Point2(12,-12),new Point2(5,-8),new Point2(1,-6),new Point2(-3,-5),new Point2(-9,-5),new Point2(-14,-4),new Point2(-17,-4));
 
-// let archTest1 = new Array(new Point2(0,0),new Point2(-3,-18),new Point2(-11,-40),new Point2(-23,-79),new Point2(-40,-122),new Point2(-49,-158),new Point2(-55,-188),new Point2(-56,-210),new Point2(-56,-224),new Point2(-53,-231),new Point2(-51,-238),new Point2(-46,-248),new Point2(-39,-263),new Point2(-23,-278),new Point2(-3,-292),new Point2(24,-304),new Point2(57,-317),new Point2(94,-327),new Point2(116,-331),new Point2(127,-331),new Point2(137,-330),new Point2(148,-328),new Point2(160,-321),new Point2(173,-314),new Point2(181,-305),new Point2(191,-289),new Point2(199,-268),new Point2(208,-242),new Point2(215,-211),new Point2(219,-183),new Point2(219,-155),new Point2(218,-133),new Point2(217,-118),new Point2(216,-106),new Point2(215,-100),new Point2(215,-95),new Point2(215,-91),new Point2(214,-90));
+let archTest1 = new Array(new Point2(0,0),new Point2(-3,-18),new Point2(-11,-40),new Point2(-23,-79),new Point2(-40,-122),new Point2(-49,-158),new Point2(-55,-188),new Point2(-56,-210),new Point2(-56,-224),new Point2(-53,-231),new Point2(-51,-238),new Point2(-46,-248),new Point2(-39,-263),new Point2(-23,-278),new Point2(-3,-292),new Point2(24,-304),new Point2(57,-317),new Point2(94,-327),new Point2(116,-331),new Point2(127,-331),new Point2(137,-330),new Point2(148,-328),new Point2(160,-321),new Point2(173,-314),new Point2(181,-305),new Point2(191,-289),new Point2(199,-268),new Point2(208,-242),new Point2(215,-211),new Point2(219,-183),new Point2(219,-155),new Point2(218,-133),new Point2(217,-118),new Point2(216,-106),new Point2(215,-100),new Point2(215,-95),new Point2(215,-91),new Point2(214,-90));
 // let archTest2 = new Array(new Point2(0,0),new Point2(-1,-2),new Point2(-2,-7),new Point2(-2,-21),new Point2(-5,-96),new Point2(-8,-130),new Point2(-10,-149),new Point2(-10,-162),new Point2(-11,-171),new Point2(-9,-175),new Point2(-8,-179),new Point2(-8,-180),new Point2(-7,-182),new Point2(-7,-183),new Point2(-6,-183),new Point2(-5,-183),new Point2(0,-184),new Point2(33,-195),new Point2(114,-216),new Point2(153,-223),new Point2(168,-226),new Point2(177,-227),new Point2(180,-228),new Point2(180,-227),new Point2(179,-227),new Point2(178,-226),new Point2(177,-226),new Point2(176,-225),new Point2(176,-224),new Point2(175,-222),new Point2(175,-217),new Point2(175,-188),new Point2(177,-154),new Point2(181,-103),new Point2(183,-45),new Point2(177,-6),new Point2(179,11),new Point2(179,23),new Point2(180,31),new Point2(180,33),new Point2(180,35),new Point2(181,38),new Point2(181,39),new Point2(182,40),new Point2(182,41));
 
 // let circleTest3 = new Array(new Point2(0,0),new Point2(-16,1),new Point2(-35,10),new Point2(-56,28),new Point2(-72,51),new Point2(-83,77),new Point2(-86,106),new Point2(-86,141),new Point2(-81,166),new Point2(-69,190),new Point2(-52,208),new Point2(-30,221),new Point2(-4,226),new Point2(25,226),new Point2(57,217),new Point2(84,199),new Point2(107,176),new Point2(128,149),new Point2(142,127),new Point2(151,100),new Point2(151,67),new Point2(141,38),new Point2(126,17),new Point2(99,-4),new Point2(74,-14),new Point2(45,-15),new Point2(19,-15))
@@ -867,7 +868,7 @@ module.exports = gestureRecognizer;
 
 
 // console.log(myGestureClass.classifyGesture(arch2[0]));
-// console.log(myGestureClass.classifyGesture(archTest1)); // gets classified as carat
+console.log(myGestureClass.classifyGesture(archTest1)); // gets classified as carat
 // console.log(myGestureClass.classifyGesture(badArch));
 
 // p1 = new Array(new Point2(1,3), new Point2(3,5), new Point2(2,4));

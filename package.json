@@ -32,5 +32,7 @@
     "react-native-svg": "*",
     "react-native-fs": "*"
   },
-  "dependencies": {}
+  "dependencies": {
+    "react-native": "^0.57.5"
+  }
 }
