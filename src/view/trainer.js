@@ -1,8 +1,9 @@
 import React from 'react';
-import {View, PanResponder, StyleSheet, Button, TextInput} from 'react-native';
+import {View, PanResponder, StyleSheet, Button, TextInput, TouchableOpacity, Text} from 'react-native';
 import Pen from '../tools/pen';
 import Point from '../tools/point';
 import Svg, {G, Path} from 'react-native-svg';
+import gestureRecognizer from '../tools/rubine';
 let RNFS = require('react-native-fs'); // for writing json files
 
 export default class Trainer extends React.Component {
@@ -21,6 +22,7 @@ export default class Trainer extends React.Component {
 			gestureClassPoints: [],
 			pen: new Pen(),
 			currGestureClassName: "gestureClassName",
+			symmetrical: false,
 			gestureClassOutputFile: writeObj,
 		};
 
@@ -46,6 +48,38 @@ export default class Trainer extends React.Component {
 		}
 	}
 
+	toggleSymmetricalSelectButton = () => {
+		this.setState({symmetrical: !this.state.symmetrical})
+	} 
+
+	SymmetricalSelectButton() {
+		return (
+			<TouchableOpacity style={{ flexDirection:'row' }} onPress={this.toggleSymmetricalSelectButton}>
+				<View style={[{
+				height: 18,
+				width: 18,
+				borderRadius: 8,
+				borderWidth: 2,
+				borderColor: '#000',
+				alignItems: 'center',
+				justifyContent: 'center',
+				}]}>
+				{
+					this.state.symmetrical ?
+					<View style={{
+						height: 12,
+						width: 12,
+						borderRadius: 6,
+						backgroundColor: '#000',
+					}}/>
+					: null
+				}
+				</View>
+				<Text> Symmetrical </Text>
+			</TouchableOpacity>
+		);
+	  }
+	
 	// Undo the previous stroke, remove the last added gesture from the current gesture class
 	rewind = () => {
 		if (
@@ -97,6 +131,7 @@ export default class Trainer extends React.Component {
 		let currGestureClass = {
 			'gestureClassName': this.state.currGestureClassName,
 			'trainingGestures': this.state.gestureClassPoints,
+			'symmetrical': this.state.symmetrical
 		}
 		writeObj.gestureClasses.push(currGestureClass);
 
@@ -107,25 +142,27 @@ export default class Trainer extends React.Component {
 			gestureClassPoints: [],
 			pen: new Pen(),
 			currGestureClassName: "gestureClassName",
+			symmetrical: false,
 			gestureClassOutputFile: writeObj
 		})
 	}
 
-	// Write the current gesture class to the gestureClasses.json file
+	// Write the current gesture class to the model.json file
 	exportGestureClass = () => {
 		// if they haven't saved the current gesture, add it to the object
 		if (this.state.gestureClassPoints.length != 0 && this.state.currGestureClassName.length != 0) {
 			this.saveAndAddNewGestureClass();
 		}
 
-		let writeObj = this.state.gestureClassOutputFile;
-		console.log(writeObj);
+		if (this.state.gestureClassOutputFile.gestureClasses.length > 0) {
+			let gestureTrainingObject = this.state.gestureClassOutputFile.gestureClasses;
+			let myRecognizer = new gestureRecognizer(gestureTrainingObject);
+			let writeObj = myRecognizer.exportValues();
 
-		if (writeObj.gestureClasses.length > 0) {
-			const path = this.props.path + '/gestureClasses.json';
+			const path = this.props.path + '/model.json';
 			RNFS.writeFile(path, JSON.stringify(writeObj), 'utf8')
 				.then(success => {
-					console.log('gestureClasses written!');
+					console.log('model written!');
 				})
 				.catch(err => {
 					console.log(err.message);
@@ -139,6 +176,7 @@ export default class Trainer extends React.Component {
 				gestureClassPoints: [],
 				pen: new Pen(),
 				currGestureClassName: "gestureClassName",
+				symmetrical: false
 			});
 		}
 	};
@@ -225,10 +263,7 @@ export default class Trainer extends React.Component {
 	};
 
 	render() {
-		// console.log(this.state.gestureClassPoints);
-		if (this.state.gestureClassOutputFile != null) {
-
-		}
+		let symmetricalSelect = this.SymmetricalSelectButton()
 		return (
 			<View style={{flex: 1, alignItems: 'stretch'}}>
 				{/* The Original RN-Draw Component */}
@@ -254,10 +289,13 @@ export default class Trainer extends React.Component {
 					</View>
 				</View>
 
-				<TextInput
-					style={styles.nameClass}
+				<View style={styles.nameClass}>
+				<TextInput style= {{flex: 2, textAlign: 'center'}}
 					onChangeText={(text) => this.setState({currGestureClassName: text})}
 					value={this.state.currGestureClassName}/>
+					{symmetricalSelect}
+				</View>
+
 				<View style={styles.button}>
 					<Button onPress={this.clear} title="Clear" />
 					<Button onPress={this.rewind} title="Undo" />
@@ -268,6 +306,7 @@ export default class Trainer extends React.Component {
 		);
 	}
 }
+
 
 let styles = StyleSheet.create({
 	drawContainer: {
@@ -287,7 +326,6 @@ let styles = StyleSheet.create({
 		backgroundColor: '#c1c1ba'
 	},
 	nameClass: {
-		height: 30,
-		textAlign: 'center',
+		flexDirection: 'row',
 	}
 });

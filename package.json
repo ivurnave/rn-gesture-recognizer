@@ -1,6 +1,6 @@
 {
   "name": "rn-gesture-recognizer",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A library for gesture recognition in React Native. Built off of the rn-draw package.",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jayeszee/rn-draw.git"
+    "url": "https://github.com/ivurnave/rn-gesture-recognizer.git"
   },
   "keywords": [
     "react-native",
@@ -17,14 +17,10 @@
     "android",
     "ios",
     "mobile",
-    "expo",
     "gesture",
     "recognition"
   ],
   "author": "Evan Holmes, Bidit Sharma, Bridget Koehler",
-  "bugs": {
-    "url": "https://github.com/jayeszee/rn-draw/issues"
-  },
   "license": "MIT",
   "peerDependencies": {
     "react": "*",

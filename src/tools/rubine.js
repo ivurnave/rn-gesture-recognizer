@@ -1,12 +1,18 @@
-//
-// Point class
-//
-function Point(x, y) // constructor
-{
-	this.X = x;
-	this.Y = y;
-	this.time = null;
-}
+import Point from './point';
+
+// Constants
+const NUM_FEATURES = 11;
+const math = require('mathjs');
+
+/* 
+
+Training data array: 
+
+gesture <- Array of Point
+gestureClass <- Array of gesture for a single gesture class
+gestureClasses <- Array of gestureClass 
+
+*/
 
 function FrechetHelpderData(meanPoints, deviation, symmetrical){
 	this.meanPoints = meanPoints;
@@ -29,24 +35,6 @@ function Distance(p1, p2)
 	return Math.sqrt(dx * dx + dy * dy + 0.01);
 }
 
-////////////// OUR CODE BELOW
-
-/* 
-
-Training data array: 
-
-gesture <- Array of Point
-gestureClass <- Array of gesture for a single gesture class
-gestureClasses <- Array of gestureClass 
-
-*/
-
-// Constants
-const NUM_FEATURES = 11;
-const math = require('mathjs');
-// var gestures = require('./exampleGestures.js');
-// console.log(gestures.line2);
-
 // helper function for f9
 function getAngle(p1, p2, p3) 
 {
@@ -57,7 +45,7 @@ function getAngle(p1, p2, p3)
 	return Math.atan((dxp1*dyp0 - dxp0*dyp1) / (dxp1*dxp0 + dyp1*dyp0 + 0.01)); // adding 0.01 to avoid dividing by 0 and getting NaN
 }
 
-//resizes the set of points to specific size
+// resizes the set of points to specific size
 function resize(points, size){
 	var minX = +Infinity, maxX = -Infinity, minY = +Infinity, maxY = -Infinity;
 	for (var i = 0; i < points.length; i++) {
@@ -78,30 +66,9 @@ function resize(points, size){
 	return points
 }
 
-
 // scaling function:
 const SquareSize = 500.0;
 const Origin = new Point(0,0);
-
-// Rectangle class
-function Rectangle(x, y, width, height) // constructor
-{
-	this.X = x;
-	this.Y = y;
-	this.Width = width;
-	this.Height = height;
-}
-function BoundingBox(points)
-{
-	var minX = +Infinity, maxX = -Infinity, minY = +Infinity, maxY = -Infinity;
-	for (var i = 0; i < points.length; i++) {
-		minX = Math.min(minX, points[i].X);
-		minY = Math.min(minY, points[i].Y);
-		maxX = Math.max(maxX, points[i].X);
-		maxY = Math.max(maxY, points[i].Y);
-	}
-	return new Rectangle(minX, minY, maxX - minX, maxY - minY);
-}
 
 //helper function to get IndivativeAngle
 function Centroid(points)
@@ -173,14 +140,11 @@ function TranslateTo(points, pt) // translates points' centroid
 	return newpoints;
 }
 
-
 function normalize(points){
 	newpoints = Resample(points, 200);		
 	newpoints = TranslateTo(newpoints, Origin);
 	newpoints = resize(newpoints, SquareSize);
-	// let radians = IndicativeAngle(points);
-	// points = RotateBy(points, -radians);
-	return newpoints
+	return newpoints;
 }
 
 
@@ -395,7 +359,6 @@ function getCommonCovarianceMatrix(gestureClasses){
 		covMatrices[i] = getCovarianceMatrix(gestureClasses[i]);
 	}
 	let denominator = -numClasses + numGestureExamples;
-
 	let sum = 0;
 	for (let i=0; i<NUM_FEATURES; i++){
 		for (let j=0; j<NUM_FEATURES; j++){
@@ -460,12 +423,11 @@ function meanGesture(trainingPoints){
 		sumX = 0;
 		sumY = 0;
 		for (let j=0; j<trainingSetLength; j++){
-			// sumX += trainingPoints[j][i].X
-			// sumY += trainingPoints[j][i].Y
+			sumX += trainingPoints[j][i].X
+			sumY += trainingPoints[j][i].Y
 		}
 		retPoint.push(new Point(sumX/trainingSetLength, sumY/trainingSetLength));
 	}
-	return trainingPoints[0];
 	return retPoint;
 }
 
@@ -492,7 +454,6 @@ function frechetHelper(ca, i, j, P, Q){
 	return ca[i][j]
 }
 
-
 // returns Frechet distance between points1 and frechetDistanceHelperValues.mean
 function frechetDistance(points1, frechetDistanceHelperValues){
 	let points2 = frechetDistanceHelperValues.meanPoints;
@@ -510,7 +471,6 @@ function frechetDistance(points1, frechetDistanceHelperValues){
 	return [frechetD, (frechetDistanceHelperValues.deviation<frechetD)];
 }
 
-
 function getFrechetDeviation(trainingGestures){
 	let meanPoints = meanGesture(trainingGestures);
 	l1 = meanPoints.length;
@@ -524,40 +484,33 @@ function getFrechetDeviation(trainingGestures){
 			max = frechetD;
 		}
 	});
-	return (max + 0.3*max);
+	return (max + 0.8*max);
 }
-
-
 
 let gestureRecognizer = class{
 	constructor(trainingData){
 		this._numClasses = 0;
 		this._classNames = new Array();
 		this._gestureClasses = new Array()
+		this._frechetDistanceHelperValues = new Array();
 
 		this._invComCovMatrix = new Array();
 		this._avgFeatures = new Array();
 		this._weight0sofAllVectors = new Array();
 		this._featureWeightsForClasses = new Array();	
-		
-		this._weight0sofAllVectors = new Array();
-		this._featureWeightsForClasses = new Array();
 
 		// Where training data is added in order to train
 		if (trainingData) {
 			this.addGestures(trainingData);
 		}
-	}
+}
 
 	train(){
 		for (let i=0; i<this._numClasses; i++){
 			this._avgFeatures.push(getAvgFeatureVectorForClass(this._gestureClasses[i]))
 		}
-		// console.log("COV ::: ", getCommonCovarianceMatrix(this._gestureClasses));
 
 		this._invComCovMatrix = math.inv(getCommonCovarianceMatrix(this._gestureClasses));
-		// console.log("COMMON COV ::: ", this._invComCovMatrix)
-
 		this._weight0sofAllVectors = getWeight0s(this._gestureClasses);
 		this._featureWeightsForClasses = getFeatureWeightsForClasses(this._gestureClasses);
 		console.log('numClasses: ', this._numClasses);
@@ -566,21 +519,31 @@ let gestureRecognizer = class{
 	addGestures(trainingData) {
 		var self = this;
 		trainingData.forEach(function(gestureClass) {
-			self.addGesture(gestureClass.gestureClassName, gestureClass.trainingGestures);
+			self.addGesture(gestureClass.gestureClassName, gestureClass.trainingGestures, gestureClass.symmetrical);
 		})
 		this.train();
 	}
 	
-	addGesture(className, gestureClass){
+	addGesture(className, gestureClass, symmetrical){
+		let trainingGestures = new Array();
+		gestureClass.forEach(points => {
+			trainingGestures.push(normalize(points))
+			spitPoints(normalize(points))
+		});	
+
 		this._classNames.push(className);
-		this._gestureClasses.push(gestureClass);
+		this._gestureClasses.push(trainingGestures);
+
+		let deviation = getFrechetDeviation(trainingGestures);
+		this._frechetDistanceHelperValues.push(new FrechetHelpderData(meanGesture(trainingGestures), deviation, symmetrical));
 		this._numClasses += 1;
-	}
+}
 
 	removeGesture(className){
 		let index = this._classNames.indexOf(className);
 		this.className.splice(index, 1);
 		this._gestureClasses.splice(index, 1);
+		this._frechetDistanceHelperValues.splice(index, 1);
 		this.train();
 	}
 
@@ -598,47 +561,24 @@ let gestureRecognizer = class{
 		}
 		let max = Math.max.apply(Math, weightEval);
 		let maxIndex = weightEval.indexOf(max);
-		// console.log(weightEval)
-		// console.log(max, maxIndex)
-		// let classificationProb = this.getClassificationProb(weightEval);
-		// console.log("PROB ::: ", classificationProb);
-		// this.getMahalanobisDistance(maxIndex, featureVector);
 
-		console.log(weightEval) 
-		console.log("rubine's classification ::: ", this._classNames[maxIndex])
 		let frechetD = frechetDistance(points, this._frechetDistanceHelperValues[maxIndex]);
-		console.log("Frechet Distance ::: ", frechetD[0], frechetD[1]);
 		if (frechetD[1]){
 			return "Unclassified";
 		}
-		else{
-			return this._classNames[maxIndex];
-
-		}
-		return this._classNames[maxIndex]
-
+		return this._classNames[maxIndex];
 	}
 
-	getClassificationProb(weights){
-		let max = Math.max.apply(Math, weights);
-		let maxWeightIndex = weights.indexOf(max);
-		let sum = 0;
-		for (let i=0; i<this._numClasses; i++){
-			sum += Math.exp(weights[i] - max);
-		}
-		return (1/sum);
-	}
-
-	getMahalanobisDistance(classIndex, featureVector){
-		let averageFeatures = this._avgFeatures[classIndex];
-		let sum = 0
-		for (let j=0; j<NUM_FEATURES; j++){
-			for (let k=0; k<NUM_FEATURES; k++){
-				sum += this._invComCovMatrix[j][k] * (featureVector[j] - averageFeatures[j]) * (featureVector[k] - averageFeatures[k]);
-			}
-		}
-		// console.log ("M Dist :  ", sum, "1/2 F2 : ", (1/2)*NUM_FEATURES*NUM_FEATURES);
-		return sum;
+	exportValues() {
+		let writeObj = {
+			classNames: this._classNames,
+			frechetDistanceHelperValues: this._frechetDistanceHelperValues,
+			invComCovMatrix: this._invComCovMatrix,
+			avgFeatures: this._avgFeatures,
+			weight0sofAllVectors: this._weight0sofAllVectors,
+			featureWeightsForClasses: this._featureWeightsForClasses
+		};
+		return JSON.stringify(writeObj);
 	}
 };
 
